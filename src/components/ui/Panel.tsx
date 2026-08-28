@@ -31,7 +31,7 @@ export function Panel({ title, subtitle, action, children, className = "" }: Pan
           {action}
         </header>
       )}
-      <div className="px-5 pb-5">{children}</div>
+      <div className={title || action ? "px-5 pb-5" : "p-5"}>{children}</div>
     </section>
   );
 }

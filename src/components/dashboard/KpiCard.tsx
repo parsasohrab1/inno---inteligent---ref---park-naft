@@ -35,7 +35,7 @@ export function KpiCard({ kpi }: { kpi: KpiDatum }) {
           )}
         </div>
         <div className="flex items-center gap-1 text-xs font-medium tabular" style={{ color: deltaColor }}>
-          {isUp ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+          {isUp ? <ArrowUpRight size={14} aria-hidden="true" /> : <ArrowDownRight size={14} aria-hidden="true" />}
           {formatDelta(kpi.delta)}
         </div>
       </div>

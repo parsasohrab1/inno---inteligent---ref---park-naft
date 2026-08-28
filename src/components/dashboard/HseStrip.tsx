@@ -27,7 +27,7 @@ export function HseStrip({ daysSinceIncident, flaringM3, emissionsCo2Tpd, hseCom
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
             style={{ background: `color-mix(in srgb, ${it.color} 16%, transparent)`, color: it.color }}
           >
-            <it.icon size={16} />
+            <it.icon size={16} aria-hidden="true" />
           </span>
           <div className="min-w-0">
             <div className="text-sm font-semibold tabular truncate" style={{ color: "var(--text-primary)" }}>

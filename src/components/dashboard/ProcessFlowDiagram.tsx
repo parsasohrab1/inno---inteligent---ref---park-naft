@@ -21,6 +21,12 @@ const nodes: FlowNode[] = [
   { id: "products", x: 708, y: 96, w: 92, h: 48, label: "Product Pool" },
 ];
 
+const supportNodes: FlowNode[] = [
+  { id: "pump", x: 148, y: 264, w: 96, h: 44, label: "PS-101A", unitId: "u7" },
+  { id: "utl", x: 288, y: 264, w: 96, h: 44, label: "UTL-600", unitId: "u6" },
+  { id: "cws", x: 568, y: 264, w: 96, h: 44, label: "CWS-700", unitId: "u8" },
+];
+
 const edges: [string, string][] = [
   ["tanks", "cdu"],
   ["cdu", "vdu"],
@@ -29,6 +35,12 @@ const edges: [string, string][] = [
   ["cru", "sru"],
   ["hcu", "sru"],
   ["sru", "products"],
+];
+
+const supportEdges: [string, string][] = [
+  ["pump", "cdu"],
+  ["utl", "vdu"],
+  ["cws", "sru"],
 ];
 
 function center(n: FlowNode) {
@@ -42,9 +54,18 @@ function edgePath(a: FlowNode, b: FlowNode) {
   return `M${p1.x},${p1.y} C${midX},${p1.y} ${midX},${p2.y} ${p2.x},${p2.y}`;
 }
 
+function supportEdgePath(a: FlowNode, b: FlowNode) {
+  const p1 = { x: center(a).x, y: a.y };
+  const p2 = { x: center(b).x, y: b.y + b.h };
+  const midY = (p1.y + p2.y) / 2;
+  return `M${p1.x},${p1.y} C${p1.x},${midY} ${p2.x},${midY} ${p2.x},${p2.y}`;
+}
+
+const allNodes = [...nodes, ...supportNodes];
+
 export function ProcessFlowDiagram({ units }: { units: ProcessUnit[] }) {
   const unitById = new Map(units.map((u) => [u.id, u]));
-  const nodeById = new Map(nodes.map((n) => [n.id, n]));
+  const nodeById = new Map(allNodes.map((n) => [n.id, n]));
 
   function statusFor(n: FlowNode): UnitStatus {
     if (!n.unitId) return "running";
@@ -53,7 +74,7 @@ export function ProcessFlowDiagram({ units }: { units: ProcessUnit[] }) {
 
   return (
     <div className="w-full overflow-x-auto scroll-thin">
-      <svg viewBox="0 0 824 240" className="min-w-[720px] w-full h-auto" role="img" aria-label="Process flow diagram">
+      <svg viewBox="0 0 824 328" className="min-w-[720px] w-full h-auto" role="img" aria-label="Process flow diagram">
         <defs>
           <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M0,0 L10,5 L0,10 z" fill="var(--baseline)" />
@@ -75,7 +96,22 @@ export function ProcessFlowDiagram({ units }: { units: ProcessUnit[] }) {
           );
         })}
 
-        {nodes.map((n) => {
+        {supportEdges.map(([fromId, toId]) => {
+          const from = nodeById.get(fromId)!;
+          const to = nodeById.get(toId)!;
+          return (
+            <path
+              key={`${fromId}-${toId}`}
+              d={supportEdgePath(from, to)}
+              fill="none"
+              stroke="var(--baseline)"
+              strokeWidth={1.25}
+              strokeDasharray="4 3"
+            />
+          );
+        })}
+
+        {allNodes.map((n) => {
           const status = statusFor(n);
           const meta = statusMeta[status];
           return (
@@ -104,6 +140,10 @@ export function ProcessFlowDiagram({ units }: { units: ProcessUnit[] }) {
             </g>
           );
         })}
+
+        <text x={16} y={252} fontSize="10" fontWeight={600} fill="var(--text-muted)">
+          Support systems
+        </text>
       </svg>
     </div>
   );

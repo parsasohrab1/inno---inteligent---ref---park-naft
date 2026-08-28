@@ -8,10 +8,12 @@ import { TankGauges } from "@/components/dashboard/TankGauges";
 import { ProcessFlowDiagram } from "@/components/dashboard/ProcessFlowDiagram";
 import { HseStrip } from "@/components/dashboard/HseStrip";
 import { useLiveTrend } from "@/hooks/useLiveTrend";
-import { alarms, kpis, processUnits, safety, tanks } from "@/data/mockData";
+import { useAlarms } from "@/hooks/useAlarms";
+import { kpis, processUnits, safety, tanks } from "@/data/mockData";
 
 export function Dashboard() {
   const trend = useLiveTrend();
+  const { alarms, acknowledge } = useAlarms();
 
   return (
     <Layout>
@@ -34,7 +36,7 @@ export function Dashboard() {
           </Panel>
 
           <Panel title="Alarms & Events" subtitle="هشدارها و رویدادها">
-            <AlarmsPanel alarms={alarms} />
+            <AlarmsPanel alarms={alarms} onAcknowledge={acknowledge} />
           </Panel>
         </div>
 

@@ -7,27 +7,31 @@
 
 ## Stack
 
-- **Vite + React 19 + TypeScript** — app shell & build tooling
+- **Vite + React 19 + TypeScript** (`strict` mode) — app shell & build tooling
+- **React Router 7** — client-side routing, per-page code-splitting via `React.lazy`
 - **Tailwind CSS v4** (via `@tailwindcss/vite`) — utility styling, theme tokens as CSS variables
 - **Recharts** — process trend charts (temperature / pressure / flow)
 - **lucide-react** — icon set
+- **Vazirmatn** (Google Fonts) — Persian/Latin typeface for bilingual labels
 - Design tokens follow a validated categorical/status/sequential color system
-  (see `src/index.css`) — colorblind-safe, contrast-checked against the dark
-  control-room surface used by default.
+  (see `src/index.css`) — colorblind-safe, contrast-checked in both the dark
+  control-room surface (default) and the light theme.
 
 ## Project structure
 
 ```
 src/
   components/
-    layout/       # Sidebar, Topbar, page Layout shell
+    layout/       # Sidebar (+ mobile drawer), Topbar, shared NavList, Layout shell
     dashboard/     KPI cards, trend charts, alarms panel, equipment grid,
                     tank gauges, process flow diagram, HSE strip
     ui/            Shared primitives (Panel, StatusDot/Badge)
   data/            Mock data — swap for real API/historian calls
-  hooks/           useLiveTrend — simulated live telemetry feed
-  lib/             Formatting & status/severity color helpers
-  pages/           Dashboard page composition
+  hooks/           useLiveTrend (simulated telemetry), useAlarms (shared alarm
+                    state + acknowledge), useTheme (dark/light, persisted)
+  lib/             Formatting, status/severity color helpers, nav config
+  pages/           One page per sidebar section (Overview, Process Units,
+                    Trends, Tanks & Storage, Alarms, HSE, Settings)
   types/           Shared TypeScript types (ProcessUnit, AlarmEvent, …)
 ```
 
@@ -42,32 +46,56 @@ npm run preview    # preview the production build
 
 ## What's implemented
 
+- **Full navigation** — every sidebar item (Overview, Process Units, Trends,
+  Tanks & Storage, Alarms, HSE, Settings) routes to a real page; the sidebar
+  collapses to icons on desktop and becomes a slide-over drawer on mobile
+  (opened from the Topbar hamburger button below the `md` breakpoint).
 - **KPI row** — crude throughput, product yield, energy intensity, active alarms
   (each with a compact sparkline and period-over-period delta).
-- **Process flow diagram** — CDU → VDU → CRU/HCU → SRU → Product Pool, node color
-  reflects live unit status.
+- **Process flow diagram** — CDU → VDU → CRU/HCU → SRU → Product Pool plus a
+  support-systems row (feed pumps, utilities/steam, cooling water) so all 8
+  mock process units are represented, including the one currently in `fault`.
 - **Process trends** — temperature / pressure / flow as three small-multiple
   charts (kept on separate scales deliberately — a shared axis across
   different units of measure is a classic dashboard mistake).
 - **Alarms & events** — severity-coded feed (critical/serious/warning/resolved),
-  bilingual (EN/FA) messages.
+  bilingual (EN/FA) messages, filterable by severity, with a working
+  **Acknowledge** action backed by shared state (`useAlarms`) — acknowledging
+  an alarm anywhere (Topbar bell, Dashboard panel, Alarms page) updates the
+  unread count everywhere.
 - **Process units grid** — status badges (running/standby/warning/fault) per unit.
-- **Tanks & storage** — level meters with severity-colored fill.
+- **Tanks & storage** — level meters with severity-colored fill, plus a
+  sortable-by-eye detail table and aggregate fill-rate stats.
 - **HSE & sustainability strip** — days since incident, flaring, CO₂ emissions,
   compliance score.
+- **Topbar** — live clock, working unit/tank search with results dropdown,
+  notification bell with a real dropdown of unacknowledged alarms (badge count
+  is derived, never hardcoded), user menu, and a dark/light theme toggle.
+- **Theme** — dark (default) and light are both reachable at runtime, persisted
+  to `localStorage`, seeded from `prefers-color-scheme` on first visit.
+- **Accessibility** — icon-only buttons carry `aria-label`s, decorative icons
+  are `aria-hidden`, the active nav item exposes `aria-current` (via
+  `NavLink`), and severity filters use `aria-pressed`/`role="group"`.
+- **Code-split routing** — each page is a separate `React.lazy` chunk, so the
+  `recharts`-heavy Trends bundle isn't downloaded until a user actually visits
+  it.
+- **TypeScript `strict` mode** is on for both the app and Vite config.
 
-## Next steps (suggested)
+## Known limitations / next steps
 
-1. Replace `src/data/mockData.ts` and `useLiveTrend` with real data-source
-   bindings (historian REST API, OPC-UA gateway, or a WebSocket/MQTT bridge).
-2. Add authentication / role-based access if this will be exposed beyond the
-   control room network.
-3. Add routing (React Router) for the remaining sidebar sections (Process
-   Units detail, Trends explorer, Tanks detail, Alarms log, HSE reports).
-4. Add a light-mode toggle if operators need it — the color tokens in
-   `src/index.css` already define a `[data-theme="light"]` variant.
-
-
+1. All data is simulated (`src/data/mockData.ts`, `useLiveTrend`) — only the
+   trend charts actually tick on an interval. Wiring a real historian/OPC-UA/
+   MQTT feed would need every panel (alarms, tanks, unit status, KPIs) to
+   subscribe the same way `useLiveTrend` does.
+2. No authentication / role-based access — required before exposing this
+   beyond a trusted control-room network. The Topbar user menu is a static
+   placeholder, not a real session.
+3. "Bilingual" today means English + Farsi labels shown side by side, not a
+   true i18n switch — there's no `dir="rtl"` layout mode. A real Farsi-primary
+   mode would need a language toggle plus RTL-aware layout, not just translated
+   strings.
+4. No automated tests yet (unit or e2e) — worth adding before further feature
+   growth, especially around `useAlarms` and the routing shell.
 
 📄 سند الزامات نرم‌افزاری (SRS) - سامانه IA-RPPMS
 ۱. مقدمه
