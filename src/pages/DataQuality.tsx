@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { Panel } from "@/components/ui/Panel";
 import { reconciledTags } from "@/data/mockData";
+import { loadPersisted, savePersisted } from "@/lib/persist";
 import type { ReconciledTag } from "@/types";
 
+const STORAGE_KEY = "data-quality-state-v1";
+
 export function DataQuality() {
-  const [tags, setTags] = useState<ReconciledTag[]>(reconciledTags);
+  const [tags, setTags] = useState<ReconciledTag[]>(() => loadPersisted(STORAGE_KEY, reconciledTags));
+
+  useEffect(() => {
+    savePersisted(STORAGE_KEY, tags);
+  }, [tags]);
+
   const flaggedCount = tags.filter((t) => t.status === "flagged").length;
   const avgClosure = tags.reduce((sum, t) => sum + t.closurePct, 0) / tags.length;
 

@@ -166,9 +166,18 @@ Two things worth knowing if you touch this later:
    instead of the random-walk decay in `ProcessUnitsProvider`, an actual APC/
    RTO solver behind Optimization, and a real mass-balance reconciliation
    engine behind Data Quality.
-7. Auto Operator's duty/standby pairs and failure simulation are entirely
-   client-side and reset on page reload (in-memory state, no persistence) —
-   fine for a demo, not for an operational system.
+7. Auto Operator's duty/standby pairs, RUL, and alarms now persist to
+   `localStorage` (see `src/lib/persist.ts`) so state survives a reload —
+   but this is still browser-local, single-user storage, not a real shared
+   backend, and Auto Operator only ever updates this app's own simulated
+   state. It never sends a command to real equipment. It has a real,
+   working HTTP webhook hook (`Settings → Automation Integration`) for
+   notifying an external system, but with no real DCS/SIS behind that
+   webhook by default, nothing physical happens. See
+   [`docs/DCS-SIS-INTEGRATION.md`](docs/DCS-SIS-INTEGRATION.md) for what
+   a real, safety-certified control layer for this would require and which
+   real products (Honeywell, Yokogawa, Emerson, ABB, Siemens, Schneider
+   Electric/Triconex, HIMA) to evaluate for procurement.
 
 📄 سند الزامات نرم‌افزاری (SRS) - سامانه IA-RPPMS
 ۱. مقدمه

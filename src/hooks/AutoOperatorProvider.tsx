@@ -3,9 +3,26 @@ import { heavyDutyPairs } from "@/data/mockData";
 import { AutoOperatorContext } from "./autoOperatorContext";
 import { useProcessUnits } from "./useProcessUnits";
 import { useAlarms } from "./useAlarms";
+import { getWebhookUrl } from "./useAutomationSettings";
 
 const STORAGE_KEY = "auto-operator-enabled";
 const STANDBY_TAKEOVER_LOAD = 90;
+
+// Real integration point: if the operator has configured an automation
+// webhook (Settings page), actually POST the action to it. With no URL
+// configured this is a no-op — there is no real control system to notify
+// by default, and this app never claims otherwise.
+function notifyWebhook(event: Record<string, unknown>) {
+  const url = getWebhookUrl();
+  if (!url) return;
+  fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ source: "smart-refinery-auto-operator", timestamp: new Date().toISOString(), ...event }),
+  }).catch((err) => {
+    console.warn("Auto Operator webhook notification failed:", err);
+  });
+}
 
 export function AutoOperatorProvider({ children }: { children: ReactNode }) {
   const [enabled, setEnabled] = useState<boolean>(() => window.localStorage.getItem(STORAGE_KEY) === "1");
@@ -33,6 +50,12 @@ export function AutoOperatorProvider({ children }: { children: ReactNode }) {
         messageFa: `واحد آماده‌باش «${standby.nameFa}» جهت جایگزینی واحد اصلی خراب وارد مدار شد`,
         severity: "good",
       });
+      notifyWebhook({
+        action: "switch_to_standby",
+        pairId,
+        standbyUnitId: standby.id,
+        standbyTag: standby.tag,
+      });
       handledFaults.current.add(pairId);
     },
     [units, setStatus, addAlarm]
@@ -53,6 +76,7 @@ export function AutoOperatorProvider({ children }: { children: ReactNode }) {
           messageFa: `${duty.nameFa} پس از تعمیر به سرویس بازگشت — اکنون در حالت آماده‌باش`,
           severity: "good",
         });
+        notifyWebhook({ action: "unit_repaired", pairId, unitId: duty.id, tag: duty.tag });
       }
     },
     [units, markUnitRepaired, addAlarm]

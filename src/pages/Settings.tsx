@@ -1,10 +1,35 @@
+import { useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { Panel } from "@/components/ui/Panel";
 import { useTheme } from "@/hooks/useTheme";
+import { useAutomationSettings } from "@/hooks/useAutomationSettings";
+
+type TestState = "idle" | "sending" | "ok" | "error";
 
 export function Settings() {
   const { theme, setTheme } = useTheme();
+  const { webhookUrl, setWebhookUrl } = useAutomationSettings();
+  const [testState, setTestState] = useState<TestState>("idle");
+
+  const sendTestEvent = async () => {
+    if (!webhookUrl) return;
+    setTestState("sending");
+    try {
+      await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source: "smart-refinery-auto-operator",
+          action: "test_event",
+          timestamp: new Date().toISOString(),
+        }),
+      });
+      setTestState("ok");
+    } catch {
+      setTestState("error");
+    }
+  };
 
   return (
     <Layout>
@@ -34,6 +59,52 @@ export function Settings() {
           </div>
           <p className="text-xs mt-3" style={{ color: "var(--text-muted)" }}>
             Preference is saved to this browser and also honors your OS theme on first visit.
+          </p>
+        </Panel>
+
+        <Panel title="Automation Integration" subtitle="یکپارچه‌سازی با سیستم کنترل واقعی">
+          <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--text-secondary)" }} htmlFor="webhook-url">
+            Automation webhook URL (optional)
+          </label>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <input
+              id="webhook-url"
+              type="url"
+              value={webhookUrl}
+              onChange={(e) => {
+                setWebhookUrl(e.target.value);
+                setTestState("idle");
+              }}
+              placeholder="https://your-scada-gateway.example.com/webhooks/auto-operator"
+              className="flex-1 rounded-[var(--radius-sm)] border px-3 py-2 text-xs bg-transparent outline-none"
+              style={{ borderColor: "var(--border)", color: "var(--text-primary)" }}
+            />
+            <button
+              onClick={sendTestEvent}
+              disabled={!webhookUrl || testState === "sending"}
+              className="shrink-0 rounded-[var(--radius-sm)] px-3 py-2 text-xs font-medium disabled:opacity-40"
+              style={{ background: "var(--brand)", color: "#fff" }}
+            >
+              {testState === "sending" ? "Sending…" : "Send test event"}
+            </button>
+          </div>
+          {testState === "ok" && (
+            <p className="text-[11px] mt-1.5" style={{ color: "var(--status-good)" }}>
+              Test event sent — check your endpoint's request log to confirm delivery.
+            </p>
+          )}
+          {testState === "error" && (
+            <p className="text-[11px] mt-1.5" style={{ color: "var(--status-critical)" }}>
+              Request failed (network error or the endpoint rejected it) — check the URL and CORS
+              settings on the receiving side.
+            </p>
+          )}
+          <p className="text-xs mt-3 leading-relaxed" style={{ color: "var(--text-muted)" }}>
+            When set, Auto Operator sends a real HTTP POST to this URL every time it switches a
+            standby unit online or an operator marks a unit repaired — a genuine integration point
+            for a real SCADA/DCS gateway or middleware to react to. With no URL configured (the
+            default), nothing is sent — there is no real control system connected to this demo by
+            default, and Auto Operator only ever updates this app's own simulated state.
           </p>
         </Panel>
 

@@ -1,16 +1,25 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CheckCircle2, SlidersHorizontal } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { Panel } from "@/components/ui/Panel";
 import { optimizationRecommendations } from "@/data/mockData";
+import { loadPersisted, savePersisted } from "@/lib/persist";
 import type { OptimizationRecommendation } from "@/types";
+
+const STORAGE_KEY = "optimization-state-v1";
 
 function formatUsd(value: number): string {
   return `$${Math.round(value).toLocaleString("en-US")}`;
 }
 
 export function Optimization() {
-  const [recs, setRecs] = useState<OptimizationRecommendation[]>(optimizationRecommendations);
+  const [recs, setRecs] = useState<OptimizationRecommendation[]>(() =>
+    loadPersisted(STORAGE_KEY, optimizationRecommendations)
+  );
+
+  useEffect(() => {
+    savePersisted(STORAGE_KEY, recs);
+  }, [recs]);
 
   const apply = (id: string) => {
     setRecs((prev) => prev.map((r) => (r.id === id ? { ...r, applied: true } : r)));
