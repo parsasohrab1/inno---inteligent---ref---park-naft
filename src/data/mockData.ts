@@ -1,20 +1,34 @@
 import type {
   AlarmEvent,
+  HeavyDutyPair,
   KpiDatum,
+  OptimizationRecommendation,
   ProcessUnit,
+  ReconciledTag,
   TankReading,
   TrendPoint,
 } from "@/types";
 
 export const processUnits: ProcessUnit[] = [
-  { id: "u1", name: "Crude Distillation Unit", nameFa: "واحد تقطیر خوراک", area: "CDU-100", status: "running", load: 94, tag: "CDU-100" },
-  { id: "u2", name: "Vacuum Distillation Unit", nameFa: "واحد تقطیر خلاء", area: "VDU-200", status: "running", load: 87, tag: "VDU-200" },
-  { id: "u3", name: "Catalytic Reformer", nameFa: "ریفرمینگ کاتالیستی", area: "CRU-300", status: "warning", load: 76, tag: "CRU-300" },
-  { id: "u4", name: "Hydrocracker", nameFa: "هیدروکراکر", area: "HCU-400", status: "running", load: 91, tag: "HCU-400" },
-  { id: "u5", name: "Sulfur Recovery Unit", nameFa: "واحد بازیابی گوگرد", area: "SRU-500", status: "standby", load: 12, tag: "SRU-500" },
-  { id: "u6", name: "Utilities & Steam", nameFa: "یوتیلیتی و بخار", area: "UTL-600", status: "running", load: 68, tag: "UTL-600" },
-  { id: "u7", name: "Feed Pump Station A", nameFa: "ایستگاه پمپاژ خوراک A", area: "PS-101A", status: "fault", load: 0, tag: "P-101A" },
-  { id: "u8", name: "Cooling Water System", nameFa: "سیستم آب خنک‌کننده", area: "CWS-700", status: "running", load: 82, tag: "CWS-700" },
+  { id: "u1", name: "Crude Distillation Unit", nameFa: "واحد تقطیر خوراک", area: "CDU-100", status: "running", load: 94, tag: "CDU-100", rulPct: 72, rulDays: 210 },
+  { id: "u2", name: "Vacuum Distillation Unit", nameFa: "واحد تقطیر خلاء", area: "VDU-200", status: "running", load: 87, tag: "VDU-200", rulPct: 64, rulDays: 165 },
+  { id: "u3", name: "Catalytic Reformer", nameFa: "ریفرمینگ کاتالیستی", area: "CRU-300", status: "warning", load: 76, tag: "CRU-300", rulPct: 18, rulDays: 22 },
+  { id: "u4", name: "Hydrocracker", nameFa: "هیدروکراکر", area: "HCU-400", status: "running", load: 91, tag: "HCU-400", rulPct: 55, rulDays: 130 },
+  { id: "u5", name: "Sulfur Recovery Unit", nameFa: "واحد بازیابی گوگرد", area: "SRU-500", status: "standby", load: 12, tag: "SRU-500", rulPct: 81, rulDays: 260 },
+  { id: "u6", name: "Utilities & Steam", nameFa: "یوتیلیتی و بخار", area: "UTL-600", status: "running", load: 68, tag: "UTL-600", rulPct: 47, rulDays: 95 },
+  { id: "u7", name: "Feed Pump Station A", nameFa: "ایستگاه پمپاژ خوراک A", area: "PS-101A", status: "fault", load: 0, tag: "P-101A", rulPct: 0, rulDays: 0 },
+  { id: "u8", name: "Cooling Water System", nameFa: "سیستم آب خنک‌کننده", area: "CWS-700", status: "running", load: 82, tag: "CWS-700", rulPct: 58, rulDays: 140 },
+  { id: "u9", name: "Feed Pump Station B", nameFa: "ایستگاه پمپاژ خوراک B", area: "PS-101B", status: "standby", load: 0, tag: "P-101B", rulPct: 90, rulDays: 300 },
+  { id: "u10", name: "Cooling Water Pump 1", nameFa: "پمپ آب خنک‌کننده ۱", area: "CWS-700", status: "running", load: 85, tag: "P-701A", rulPct: 12, rulDays: 14 },
+  { id: "u11", name: "Cooling Water Pump 2", nameFa: "پمپ آب خنک‌کننده ۲", area: "CWS-700", status: "standby", load: 0, rulPct: 95, tag: "P-701B", rulDays: 320 },
+  { id: "u12", name: "Recycle Gas Compressor A", nameFa: "کمپرسور گاز برگشتی A", area: "HCU-400", status: "running", load: 90, tag: "K-401A", rulPct: 39, rulDays: 60 },
+  { id: "u13", name: "Recycle Gas Compressor B", nameFa: "کمپرسور گاز برگشتی B", area: "HCU-400", status: "standby", load: 0, tag: "K-401B", rulPct: 100, rulDays: 340 },
+];
+
+export const heavyDutyPairs: HeavyDutyPair[] = [
+  { id: "hd1", label: "Feed Pumps", labelFa: "پمپ‌های خوراک", dutyUnitId: "u7", standbyUnitId: "u9" },
+  { id: "hd2", label: "Cooling Water Pumps", labelFa: "پمپ‌های آب خنک‌کننده", dutyUnitId: "u10", standbyUnitId: "u11" },
+  { id: "hd3", label: "Recycle Gas Compressors", labelFa: "کمپرسورهای گاز برگشتی", dutyUnitId: "u12", standbyUnitId: "u13" },
 ];
 
 function genTrend(hours = 24): TrendPoint[] {
@@ -66,3 +80,57 @@ export const safety = {
   emissionsCo2Tpd: 862,
   hseComplianceScore: 96,
 };
+
+export const reconciledTags: ReconciledTag[] = [
+  { id: "r1", tag: "FI-2201", label: "VDU Feed Flow", labelFa: "دبی خوراک VDU", rawValue: 1184, reconciledValue: 1179, unit: "m³/h", closurePct: 99.6, status: "ok" },
+  { id: "r2", tag: "FI-3305", label: "CRU Feed Flow", labelFa: "دبی خوراک CRU", rawValue: 402, reconciledValue: 431, unit: "m³/h", closurePct: 93.3, status: "flagged" },
+  { id: "r3", tag: "TI-1042", label: "CDU Outlet Temp", labelFa: "دمای خروجی CDU", rawValue: 352.4, reconciledValue: 352.1, unit: "°C", closurePct: 99.9, status: "ok" },
+  { id: "r4", tag: "PI-5010", label: "SRU Header Pressure", labelFa: "فشار هدر SRU", rawValue: 2.14, reconciledValue: 2.15, unit: "barg", closurePct: 99.5, status: "ok" },
+  { id: "r5", tag: "LI-7710", label: "Naphtha Tank Level", labelFa: "سطح مخزن نفتا", rawValue: 91.2, reconciledValue: 90.8, unit: "%", closurePct: 99.6, status: "ok" },
+  { id: "r6", tag: "FI-8801", label: "Product Pool Mass Balance", labelFa: "موازنه جرمی استخر محصول", rawValue: 118400, reconciledValue: 121850, unit: "bbl/d", closurePct: 97.2, status: "flagged" },
+];
+
+export const optimizationRecommendations: OptimizationRecommendation[] = [
+  {
+    id: "o1",
+    parameter: "CDU Furnace Outlet Temperature",
+    parameterFa: "دمای خروجی کوره CDU",
+    tag: "TIC-1010",
+    unit: "u1",
+    currentValue: 352.4,
+    recommendedValue: 354.8,
+    valueUnit: "°C",
+    impact: "+0.4% distillate yield",
+    impactFa: "۰.۴٪+ بازده میان‌تقطیر",
+    estAnnualSavingsUsd: 186000,
+    applied: false,
+  },
+  {
+    id: "o2",
+    parameter: "CRU Reactor H2/HC Ratio",
+    parameterFa: "نسبت H2/HC راکتور CRU",
+    tag: "FIC-3120",
+    unit: "u3",
+    currentValue: 4.8,
+    recommendedValue: 4.3,
+    valueUnit: "mol/mol",
+    impact: "-2.1% hydrogen consumption",
+    impactFa: "۲.۱٪- مصرف هیدروژن",
+    estAnnualSavingsUsd: 244000,
+    applied: false,
+  },
+  {
+    id: "o3",
+    parameter: "Utilities Steam Header Pressure",
+    parameterFa: "فشار هدر بخار یوتیلیتی",
+    tag: "PIC-6005",
+    unit: "u6",
+    currentValue: 42.0,
+    recommendedValue: 39.5,
+    valueUnit: "barg",
+    impact: "-3.6% fuel gas to boilers",
+    impactFa: "۳.۶٪- گاز سوخت مصرفی بویلرها",
+    estAnnualSavingsUsd: 312000,
+    applied: false,
+  },
+];

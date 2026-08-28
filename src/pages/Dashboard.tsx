@@ -7,17 +7,22 @@ import { AlarmsPanel } from "@/components/dashboard/AlarmsPanel";
 import { TankGauges } from "@/components/dashboard/TankGauges";
 import { ProcessFlowDiagram } from "@/components/dashboard/ProcessFlowDiagram";
 import { HseStrip } from "@/components/dashboard/HseStrip";
+import { ValueCounter } from "@/components/dashboard/ValueCounter";
 import { useLiveTrend } from "@/hooks/useLiveTrend";
 import { useAlarms } from "@/hooks/useAlarms";
-import { kpis, processUnits, safety, tanks } from "@/data/mockData";
+import { useProcessUnits } from "@/hooks/useProcessUnits";
+import { kpis, safety, tanks } from "@/data/mockData";
 
 export function Dashboard() {
   const trend = useLiveTrend();
   const { alarms, acknowledge } = useAlarms();
+  const { units } = useProcessUnits();
 
   return (
     <Layout>
       <div className="space-y-5 max-w-[1600px] mx-auto">
+        <ValueCounter />
+
         {/* KPI row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {kpis.map((k) => (
@@ -27,7 +32,7 @@ export function Dashboard() {
 
         {/* Process flow */}
         <Panel title="Process Flow" subtitle="نمای فرآیندی واحدها — CDU → VDU → CRU / HCU → SRU → Product Pool">
-          <ProcessFlowDiagram units={processUnits} />
+          <ProcessFlowDiagram units={units} />
         </Panel>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
@@ -42,7 +47,7 @@ export function Dashboard() {
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           <Panel title="Process Units" subtitle="وضعیت واحدهای فرآیندی" className="xl:col-span-2">
-            <EquipmentStatusGrid units={processUnits} />
+            <EquipmentStatusGrid units={units} />
           </Panel>
 
           <Panel title="Tanks & Storage" subtitle="سطح مخازن">

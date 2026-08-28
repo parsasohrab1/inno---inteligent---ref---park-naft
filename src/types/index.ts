@@ -8,6 +8,43 @@ export interface ProcessUnit {
   status: UnitStatus;
   load: number; // percent of design capacity
   tag: string; // instrument tag, e.g. "P-101A"
+  rulPct: number; // remaining useful life, 0-100
+  rulDays: number; // estimated days remaining at current wear rate
+}
+
+export interface HeavyDutyPair {
+  id: string;
+  label: string;
+  labelFa: string;
+  dutyUnitId: string;
+  standbyUnitId: string;
+}
+
+export interface ReconciledTag {
+  id: string;
+  tag: string;
+  label: string;
+  labelFa: string;
+  rawValue: number;
+  reconciledValue: number;
+  unit: string;
+  closurePct: number; // mass/energy balance closure, 100 = perfect
+  status: "ok" | "flagged";
+}
+
+export interface OptimizationRecommendation {
+  id: string;
+  parameter: string;
+  parameterFa: string;
+  unit: string;
+  tag: string;
+  currentValue: number;
+  recommendedValue: number;
+  valueUnit: string;
+  impact: string;
+  impactFa: string;
+  estAnnualSavingsUsd: number;
+  applied: boolean;
 }
 
 export interface TrendPoint {

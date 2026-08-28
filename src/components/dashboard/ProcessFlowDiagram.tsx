@@ -23,6 +23,7 @@ const nodes: FlowNode[] = [
 
 const supportNodes: FlowNode[] = [
   { id: "pump", x: 148, y: 264, w: 96, h: 44, label: "PS-101A", unitId: "u7" },
+  { id: "pumpSpare", x: 428, y: 264, w: 96, h: 44, label: "PS-101B", unitId: "u9" },
   { id: "utl", x: 288, y: 264, w: 96, h: 44, label: "UTL-600", unitId: "u6" },
   { id: "cws", x: 568, y: 264, w: 96, h: 44, label: "CWS-700", unitId: "u8" },
 ];
@@ -43,6 +44,8 @@ const supportEdges: [string, string][] = [
   ["cws", "sru"],
 ];
 
+const pairEdges: [string, string][] = [["pump", "pumpSpare"]];
+
 function center(n: FlowNode) {
   return { x: n.x + n.w / 2, y: n.y + n.h / 2 };
 }
@@ -59,6 +62,13 @@ function supportEdgePath(a: FlowNode, b: FlowNode) {
   const p2 = { x: center(b).x, y: b.y + b.h };
   const midY = (p1.y + p2.y) / 2;
   return `M${p1.x},${p1.y} C${p1.x},${midY} ${p2.x},${midY} ${p2.x},${p2.y}`;
+}
+
+function pairEdgePath(a: FlowNode, b: FlowNode) {
+  const p1 = { x: center(a).x, y: a.y + a.h };
+  const p2 = { x: center(b).x, y: b.y + b.h };
+  const dipY = p1.y + 14;
+  return `M${p1.x},${p1.y} C${p1.x},${dipY} ${p2.x},${dipY} ${p2.x},${p2.y}`;
 }
 
 const allNodes = [...nodes, ...supportNodes];
@@ -107,6 +117,21 @@ export function ProcessFlowDiagram({ units }: { units: ProcessUnit[] }) {
               stroke="var(--baseline)"
               strokeWidth={1.25}
               strokeDasharray="4 3"
+            />
+          );
+        })}
+
+        {pairEdges.map(([fromId, toId]) => {
+          const from = nodeById.get(fromId)!;
+          const to = nodeById.get(toId)!;
+          return (
+            <path
+              key={`pair-${fromId}-${toId}`}
+              d={pairEdgePath(from, to)}
+              fill="none"
+              stroke="var(--text-muted)"
+              strokeWidth={1.25}
+              strokeDasharray="2 3"
             />
           );
         })}

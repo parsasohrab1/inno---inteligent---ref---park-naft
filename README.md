@@ -30,10 +30,15 @@ src/
     ui/            Shared primitives (Panel, StatusDot/Badge)
   data/            Mock data — swap for real API/historian calls
   hooks/           useLiveTrend (simulated telemetry), useAlarms (shared alarm
-                    state + acknowledge), useTheme (dark/light, persisted)
+                    state + acknowledge/addAlarm), useProcessUnits (shared unit
+                    state + RUL decay/failure simulation), useAutoOperator
+                    (duty/standby switchover policy), useTheme (dark/light,
+                    persisted)
   lib/             Formatting, status/severity color helpers, nav config
   pages/           One page per sidebar section (Overview, Process Units,
-                    Trends, Tanks & Storage, Alarms, HSE, Settings)
+                    Trends, Tanks & Storage, Alarms, HSE, Auto Operator,
+                    Predictive Maintenance, Optimization, Data Quality,
+                    Settings)
   types/           Shared TypeScript types (ProcessUnit, AlarmEvent, …)
 ```
 
@@ -82,6 +87,27 @@ npm run preview    # preview the production build
   `recharts`-heavy Trends bundle isn't downloaded until a user actually visits
   it.
 - **TypeScript `strict` mode** is on for both the app and Vite config.
+- **Auto Operator** (`/auto-operator`) — a master toggle that, when on, watches
+  the three duty/standby heavy-duty equipment pairs (feed pumps, cooling water
+  pumps, recycle gas compressors) and instantly brings the standby unit online
+  if the duty unit trips, logging the action to the shared alarm feed. When
+  off, a trip instead waits for the operator to click "Switch to standby"
+  (or "Simulate failure" buttons are provided to trigger a trip on demand for
+  demos, rather than waiting on the background wear simulation).
+- **Predictive Maintenance** (`/maintenance`) — every process unit carries a
+  simulated Remaining Useful Life (RUL %) that decays over time; crossing 20%
+  raises a preventive-maintenance alarm, crossing 10% an urgent-replacement
+  alarm, and reaching 0% trips the unit (which Auto Operator can then react
+  to for paired equipment). The page ranks all assets by urgency.
+- **Real-Time Optimization** (`/optimization`) — RTO/APC-style setpoint
+  recommendations with current vs. recommended value, expected impact, and an
+  "Apply" action that accrues into a live savings total.
+- **Data Quality** (`/data-quality`) — a data validation & reconciliation
+  table flagging instrument tags whose mass/energy balance closure falls
+  below threshold, with a "Reconcile" action to resolve them.
+- **Live value counter** — the Overview page leads with a large, ticking
+  "$ generated today" figure attributable to optimization, auto-switchover,
+  and predictive maintenance.
 
 ## Runs fully offline (no internet needed after build)
 
@@ -131,6 +157,18 @@ Two things worth knowing if you touch this later:
    growth, especially around `useAlarms` and the routing shell.
 5. PWA icon is SVG-only (see above) — add real 192/512px PNG + maskable
    icons if this needs to look right as a home-screen app on every platform.
+6. RUL decay, the RTO/APC recommendations, the data-reconciliation flags, and
+   the $/sec value counter are all illustrative simulations, not outputs of a
+   real reliability model, process optimizer, mass-balance engine, or
+   measured ROI study — the point is to demonstrate the workflow and UI a
+   real implementation would need, not to claim these numbers are accurate.
+   Wiring real ones in means: a condition-monitoring/ML model feeding RUL
+   instead of the random-walk decay in `ProcessUnitsProvider`, an actual APC/
+   RTO solver behind Optimization, and a real mass-balance reconciliation
+   engine behind Data Quality.
+7. Auto Operator's duty/standby pairs and failure simulation are entirely
+   client-side and reset on page reload (in-memory state, no persistence) —
+   fine for a demo, not for an operational system.
 
 📄 سند الزامات نرم‌افزاری (SRS) - سامانه IA-RPPMS
 ۱. مقدمه
