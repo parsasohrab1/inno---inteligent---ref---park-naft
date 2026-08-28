@@ -9,12 +9,12 @@ function Brand({ collapsed }: { collapsed: boolean }) {
         className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--radius-sm)] font-bold text-sm"
         style={{ background: "var(--brand)", color: "#fff" }}
       >
-        IN
+        SR
       </div>
       {!collapsed && (
         <div className="leading-tight overflow-hidden">
           <div className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>
-            Inno
+            Smart Refinery
           </div>
           <div className="text-[11px] truncate" style={{ color: "var(--text-muted)" }}>
             Park Naft Refinery

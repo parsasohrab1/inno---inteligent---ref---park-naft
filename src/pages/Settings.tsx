@@ -42,7 +42,7 @@ export function Settings() {
             <div>
               <dt style={{ color: "var(--text-muted)" }}>Product</dt>
               <dd className="mt-0.5" style={{ color: "var(--text-primary)" }}>
-                Inno — Intelligent Refinery Dashboard
+                Smart Refinery — Intelligent Dashboard
               </dd>
             </div>
             <div>

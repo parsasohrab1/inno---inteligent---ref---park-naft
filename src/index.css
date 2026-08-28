@@ -1,7 +1,8 @@
 @import "tailwindcss";
+@import "./fonts.css";
 
 /* ============================================================
-   Inno — Intelligent Refinery Dashboard (Park Naft)
+   Smart Refinery — Intelligent Dashboard (Park Naft)
    Design tokens. Palette source: Anthropic dataviz reference
    palette (validated categorical / sequential / status ramps).
    Dashboard defaults to the dark surface (industrial control-room

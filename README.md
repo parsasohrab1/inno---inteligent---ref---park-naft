@@ -1,4 +1,4 @@
-# Inno — Intelligent Refinery Dashboard (Park Naft)
+# Smart Refinery — Intelligent Dashboard (Park Naft)
 
 اسکلت پروژه و داشبرد صنعتی برای پایش لحظه‌ای واحدهای فرآیندی پالایشگاه. این نسخه‌ی
 اولیه شامل ساختار کامل پروژه (React + TypeScript + Vite + Tailwind CSS 4) و یک
@@ -12,7 +12,9 @@
 - **Tailwind CSS v4** (via `@tailwindcss/vite`) — utility styling, theme tokens as CSS variables
 - **Recharts** — process trend charts (temperature / pressure / flow)
 - **lucide-react** — icon set
-- **Vazirmatn** (Google Fonts) — Persian/Latin typeface for bilingual labels
+- **Vazirmatn** — Persian/Latin typeface for bilingual labels, self-hosted
+  under `public/fonts/` (no Google Fonts / CDN call at runtime)
+- **vite-plugin-pwa** — offline-capable, installable PWA (see below)
 - Design tokens follow a validated categorical/status/sequential color system
   (see `src/index.css`) — colorblind-safe, contrast-checked in both the dark
   control-room surface (default) and the light theme.
@@ -81,6 +83,37 @@ npm run preview    # preview the production build
   it.
 - **TypeScript `strict` mode** is on for both the app and Vite config.
 
+## Runs fully offline (no internet needed after build)
+
+The app makes **zero network calls to any external host** — every asset (JS,
+CSS, the Vazirmatn font, the favicon) is served from the same origin as the
+page, and all data is generated client-side (`src/data/mockData.ts` /
+`useLiveTrend`), so there was never a backend to depend on. On top of that,
+a service worker (via `vite-plugin-pwa`, Workbox `generateSW` strategy)
+precaches the entire built app shell on first load:
+
+```bash
+npm run build     # one-time — needs internet only to install deps the first time
+npm run preview   # serves dist/ — from here on, no internet is required at all
+```
+
+Once the service worker has installed (first successful load), the
+dashboard keeps working after closing the network entirely — reload with
+DevTools → Network → "Offline" checked, or physically disconnect, and the
+app still renders and updates its simulated trends. It's also installable
+("Add to Home Screen" / the browser's install icon) since it ships a
+`manifest.webmanifest`.
+
+Two things worth knowing if you touch this later:
+- The service worker only activates on the **production build**
+  (`npm run build` + `npm run preview`, or any static server pointed at
+  `dist/`) — `npm run dev` intentionally skips it so Vite's HMR isn't
+  fighting a cache.
+- The manifest icon is `public/favicon.svg` (type `image/svg+xml`) rather
+  than a PNG/maskable icon set — fine for install prompts in Chromium/
+  Firefox, but a proper 192/512px PNG (+ maskable variant) would be needed
+  for full Android/iOS home-screen icon compliance.
+
 ## Known limitations / next steps
 
 1. All data is simulated (`src/data/mockData.ts`, `useLiveTrend`) — only the
@@ -96,6 +129,8 @@ npm run preview    # preview the production build
    strings.
 4. No automated tests yet (unit or e2e) — worth adding before further feature
    growth, especially around `useAlarms` and the routing shell.
+5. PWA icon is SVG-only (see above) — add real 192/512px PNG + maskable
+   icons if this needs to look right as a home-screen app on every platform.
 
 📄 سند الزامات نرم‌افزاری (SRS) - سامانه IA-RPPMS
 ۱. مقدمه
