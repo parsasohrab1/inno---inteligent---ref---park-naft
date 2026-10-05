@@ -47,7 +47,7 @@ export function AutoOperatorProvider({ children }: { children: ReactNode }) {
         tag: standby.tag,
         unit: standby.area,
         message: `Standby unit "${standby.name}" brought online to replace failed duty unit`,
-        messageFa: `واحد آماده‌باش «${standby.nameFa}» جهت جایگزینی واحد اصلی خراب وارد مدار شد`,
+        messageFa: `Standby unit "${standby.nameFa}" was brought online to replace the failed main unit`,
         severity: "good",
       });
       notifyWebhook({
@@ -73,7 +73,7 @@ export function AutoOperatorProvider({ children }: { children: ReactNode }) {
           tag: duty.tag,
           unit: duty.area,
           message: `${duty.name} returned to service after maintenance — now on standby`,
-          messageFa: `${duty.nameFa} پس از تعمیر به سرویس بازگشت — اکنون در حالت آماده‌باش`,
+          messageFa: `${duty.nameFa} returned to service after repair — now on standby`,
           severity: "good",
         });
         notifyWebhook({ action: "unit_repaired", pairId, unitId: duty.id, tag: duty.tag });

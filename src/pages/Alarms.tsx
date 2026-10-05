@@ -54,7 +54,7 @@ export function Alarms() {
 
         <Panel
           title="Alarms & Events"
-          subtitle="هشدارها و رویدادها"
+          subtitle="Alarms and events"
           action={
             <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter by severity">
               {FILTERS.map((f) => (

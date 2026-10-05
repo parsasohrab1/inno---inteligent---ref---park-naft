@@ -4,11 +4,11 @@ export const statusMeta: Record<
   UnitStatus,
   { label: string; labelFa: string; color: string; dot: string }
 > = {
-  running: { label: "Running", labelFa: "در حال کار", color: "var(--status-good)", dot: "var(--status-good)" },
-  standby: { label: "Standby", labelFa: "آماده‌باش", color: "var(--text-muted)", dot: "var(--text-muted)" },
-  warning: { label: "Warning", labelFa: "هشدار", color: "var(--status-warning)", dot: "var(--status-warning)" },
-  fault: { label: "Fault", labelFa: "خطا", color: "var(--status-critical)", dot: "var(--status-critical)" },
-  offline: { label: "Offline", labelFa: "خاموش", color: "var(--text-muted)", dot: "var(--text-muted)" },
+  running: { label: "Running", labelFa: "Running", color: "var(--status-good)", dot: "var(--status-good)" },
+  standby: { label: "Standby", labelFa: "Standby", color: "var(--text-muted)", dot: "var(--text-muted)" },
+  warning: { label: "Warning", labelFa: "Warning", color: "var(--status-warning)", dot: "var(--status-warning)" },
+  fault: { label: "Fault", labelFa: "Fault", color: "var(--status-critical)", dot: "var(--status-critical)" },
+  offline: { label: "Offline", labelFa: "Shut down", color: "var(--text-muted)", dot: "var(--text-muted)" },
 };
 
 export const severityMeta: Record<

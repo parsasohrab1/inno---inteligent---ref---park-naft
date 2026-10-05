@@ -31,31 +31,31 @@ export function Dashboard() {
         </div>
 
         {/* Process flow */}
-        <Panel title="Process Flow" subtitle="نمای فرآیندی واحدها — CDU → VDU → CRU / HCU → SRU → Product Pool">
+        <Panel title="Process Flow" subtitle="Process view of units — CDU → VDU → CRU / HCU → SRU → Product Pool">
           <ProcessFlowDiagram units={units} />
         </Panel>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-          <Panel title="Process Trends — Feed Header" subtitle="۲۴ ساعت گذشته · به‌روزرسانی زنده" className="xl:col-span-2">
+          <Panel title="Process Trends — Feed Header" subtitle="Last 24 hours · live update" className="xl:col-span-2">
             <TrendChart data={trend} />
           </Panel>
 
-          <Panel title="Alarms & Events" subtitle="هشدارها و رویدادها">
+          <Panel title="Alarms & Events" subtitle="Alarms and events">
             <AlarmsPanel alarms={alarms} onAcknowledge={acknowledge} />
           </Panel>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-          <Panel title="Process Units" subtitle="وضعیت واحدهای فرآیندی" className="xl:col-span-2">
+          <Panel title="Process Units" subtitle="Status of process units" className="xl:col-span-2">
             <EquipmentStatusGrid units={units} />
           </Panel>
 
-          <Panel title="Tanks & Storage" subtitle="سطح مخازن">
+          <Panel title="Tanks & Storage" subtitle="Tank levels">
             <TankGauges tanks={tanks} />
           </Panel>
         </div>
 
-        <Panel title="HSE & Sustainability" subtitle="ایمنی، بهداشت و محیط‌زیست">
+        <Panel title="HSE & Sustainability" subtitle="Health, safety and environment">
           <HseStrip {...safety} />
         </Panel>
       </div>

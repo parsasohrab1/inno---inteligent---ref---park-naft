@@ -34,7 +34,7 @@ export function Settings() {
   return (
     <Layout>
       <div className="space-y-5 max-w-[1600px] mx-auto">
-        <Panel title="Appearance" subtitle="ظاهر برنامه">
+        <Panel title="Appearance" subtitle="Application appearance">
           <div className="flex flex-wrap gap-3">
             {(["dark", "light"] as const).map((t) => {
               const Icon = t === "dark" ? Moon : Sun;
@@ -62,7 +62,7 @@ export function Settings() {
           </p>
         </Panel>
 
-        <Panel title="Automation Integration" subtitle="یکپارچه‌سازی با سیستم کنترل واقعی">
+        <Panel title="Automation Integration" subtitle="Integration with the real control system">
           <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--text-secondary)" }} htmlFor="webhook-url">
             Automation webhook URL (optional)
           </label>
@@ -108,7 +108,7 @@ export function Settings() {
           </p>
         </Panel>
 
-        <Panel title="About" subtitle="درباره محصول">
+        <Panel title="About" subtitle="About the product">
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-xs">
             <div>
               <dt style={{ color: "var(--text-muted)" }}>Product</dt>

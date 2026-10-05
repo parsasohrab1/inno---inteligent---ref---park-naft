@@ -58,7 +58,7 @@ export function DataQuality() {
           </Panel>
         </div>
 
-        <Panel title="Data Validation & Reconciliation" subtitle="اعتبارسنجی و تطبیق داده‌ها (Data Reconciliation)">
+        <Panel title="Data Validation & Reconciliation" subtitle="Data validation and reconciliation (Data Reconciliation)">
           <div className="overflow-x-auto scroll-thin -mx-1">
             <table className="w-full text-xs">
               <thead>
@@ -120,7 +120,7 @@ export function DataQuality() {
           </div>
         </Panel>
 
-        <Panel title="About this module" subtitle="درباره این ماژول">
+        <Panel title="About this module" subtitle="About this module">
           <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             Data validation & reconciliation checks raw instrument readings against a mass/energy
             balance model and flags tags whose closure falls below an acceptable threshold (here,

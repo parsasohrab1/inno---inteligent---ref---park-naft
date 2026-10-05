@@ -39,11 +39,11 @@ export function TanksStorage() {
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-          <Panel title="Tank Levels" subtitle="سطح مخازن">
+          <Panel title="Tank Levels" subtitle="Tank levels">
             <TankGauges tanks={tanks} />
           </Panel>
 
-          <Panel title="Tank Details" subtitle="مشخصات مخازن">
+          <Panel title="Tank Details" subtitle="Tank specifications">
             <div className="overflow-x-auto scroll-thin -mx-1">
               <table className="w-full text-xs">
                 <thead>

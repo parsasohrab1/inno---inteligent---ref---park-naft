@@ -1,255 +1,255 @@
 inno - inteligent - ref - park naft
-هدف
-هدف از این سند، تعریف کامل الزامات فنی، عملیاتی و کارکردی سامانه جامع خودمختار پالایش و پتروشیمی (IA-RPPMS) است. این سامانه با هدف ایجاد یک پلتفرم یکپارچه برای مانیتورینگ، بهینه‌سازی، نگهداری پیش‌بینی‌کننده، مدیریت ایمنی و توسعه بازار در ۱۲ پالایشگاه دولتی و مجموعه‌های پتروشیمی ایران طراحی شده است.
+Purpose
+The purpose of this document is to fully define the technical, operational and functional requirements of the **Integrated Autonomous Refining and Petrochemical Management System (IA-RPPMS)**. The system is designed as an integrated platform for monitoring, optimization, predictive maintenance, safety management and market development across 12 state-owned refineries and petrochemical complexes in Iran.
 
-۱-۲ حوزه کاربرد
-پالایشگاه‌های نفت خام و میعانات گازی
+1-2 Application Scope
+Crude oil and gas condensate refineries
 
-مجتمع‌های پتروشیمی (تولید الفین، پلیمر، کود و ...)
+Petrochemical complexes (olefin, polymer, fertilizer production, etc.)
 
-واحدهای فرآیندی شامل تقطیر، کراکینگ، ریفرمینگ، هیدروتریتینگ و ...
+Process units including distillation, cracking, reforming, hydrotreating, etc.
 
-۱-۳ ذی‌نفعان
-مدیران ارشد و میانی پالایشگاه‌ها و پتروشیمی‌ها
+1-3 Stakeholders
+Senior and middle managers of refineries and petrochemicals
 
-اپراتورهای واحدهای فرآیندی
+Process unit operators
 
-تیم‌های تعمیرات و نگهداری
+Maintenance and repair teams
 
-واحدهای برنامه‌ریزی و بهینه‌سازی
+Planning and optimization units
 
-واحدهای HSE و محیط زیست
+HSE and environment units
 
-مدیران مالی و بازرگانی (توسعه بازار بین‌الملل)
+Financial and commercial managers (international market development)
 
-۲. مراجع و استانداردها
-استاندارد	شرح
-ISA-95	استاندارد یکپارچه‌سازی سیستم‌های تولید و صنعتی
-IEC 62443	امنیت سایبری در سیستم‌های اتوماسیون صنعتی
-ISO 55000	مدیریت دارایی‌های فیزیکی
-API RP 754	شاخص‌های عملکرد ایمنی فرآیند
-ISA-106	رویه‌های عملیاتی خودکار
-NAMUR NE 107	مدیریت هشدار در صنعت فرآیند
-۳. الزامات کلان سیستم
-۳-۱ معماری فنی
-معماری میکروسرویس با قابلیت مقیاس‌پذیری افقی
+2. References and Standards
+Standard	Description
+ISA-95	Standard for integrating manufacturing and industrial systems
+IEC 62443	Cybersecurity in industrial automation systems
+ISO 55000	Physical asset management
+API RP 754	Process safety performance indicators
+ISA-106	Automated operating procedures
+NAMUR NE 107	Alarm management in the process industry
+3. High-Level System Requirements
+3-1 Technical Architecture
+Microservice architecture with horizontal scalability
 
-ذخیره‌سازی تایم‌سری (مانند InfluxDB) برای داده‌های عملیاتی
+Time-series storage (such as InfluxDB) for operational data
 
-پایگاه داده رابطه‌ای (مانند PostgreSQL) برای داده‌های ساختاریافته
+Relational database (such as PostgreSQL) for structured data
 
-پیاده‌سازی روی زیرساخت ابری / on-premise با قابلیت بازیابی بلایا
+Deployment on cloud / on-premise infrastructure with disaster recovery capability
 
-پشتیبانی از ۱۲۰+ پروتکل صنعتی (OPC UA، Modbus، Profibus، HART، و ...)
+Support for 120+ industrial protocols (OPC UA, Modbus, Profibus, HART, etc.)
 
-۳-۲ الزامات امنیتی
-احراز هویت دو مرحله‌ای (MFA) برای تمام کاربران
+3-2 Security Requirements
+Two-factor authentication (MFA) for all users
 
-رمزنگاری داده‌ها در حالت سکون و در حال انتقال (AES-256، TLS 1.3)
+Data encryption at rest and in transit (AES-256, TLS 1.3)
 
-ثبت کامل لاگ‌های عملیاتی و دسترسی‌ها
+Complete logging of operations and access
 
-تفکیک سطوح دسترسی بر اساس نقش (RBAC)
+Role-based access level separation (RBAC)
 
-انطباق با استاندارد IEC 62443 سطح امنیتی SL2
+Compliance with IEC 62443 security level SL2
 
-۳-۳ الزامات عملکردی
-زمان پاسخ‌دهی صفحات داشبورد < ۳ ثانیه
+3-3 Performance Requirements
+Dashboard page response time < 3 seconds
 
-تأخیر مانیتورینگ بلادرنگ < ۵۰۰ میلی‌ثانیه
+Real-time monitoring latency < 500 milliseconds
 
-نرخ به‌روزرسانی داده‌های سنسورها: حداقل هر ۱ ثانیه
+Sensor data update rate: at least every 1 second
 
-پردازش ۳۰,۰۰۰ رکورد در دقیقه
+Processing 30,000 records per minute
 
-در دسترس بودن سیستم ۹۹.۹۹% (چهار ناین)
+System availability 99.99% (four nines)
 
-قابلیت همزمانی حداقل ۵۰۰ کاربر همزمان
+Support for at least 500 concurrent users
 
-۴. الزامات کارکردی (Functional Requirements)
-۴-۱ ماژول مانیتورینگ خودمختار (FR-MON)
-شماره	الزام	شرح
-FR-MON-01	دوقلوی دیجیتال سه‌بعدی	نمایش ۳۶۰ درجه مجتمع با جزئیات کامل شامل ۱۰۰+ قطعه حیاتی
-FR-MON-02	نقشه حرارتی	نمایش کدهای رنگی (سبز/زرد/قرمز) برای وضعیت سلامت تجهیزات
-FR-MON-03	هشدار پیش‌بینی‌کننده	تشخیص ناهنجاری و صدور اخطار ۱۲-۲۵ دقیقه قبل از خرابی
-FR-MON-04	یکپارچه‌سازی پهپادها	برنامه‌ریزی پرواز خودکار برای بازرسی مناطق پرخطر
-FR-MON-05	سنسورهای نرم‌افزاری	پیش‌بینی کیفیت محصول با ۴۰+ سنسور مجازی
-۴-۲ ماژول بهینه‌سازی خودمختار (FR-OPT)
-شماره	الزام	شرح
-FR-OPT-01	APC پیشرفته	تنظیم خودکار پارامترهای فرآیند هر ۱ دقیقه
-FR-OPT-02	RTO بلادرنگ	شبیه‌سازی سناریوها با نرخ همگرایی > ۹۶%
-FR-OPT-03	بهینه‌سازی انرژی	کاهش ۳-۸% مصرف انرژی با اصلاح نسبت سوخت به هوا
-FR-OPT-04	مدیریت هوشمند کاتالیست	پیش‌بینی غیرفعال‌سازی و زمان تعویض
-FR-OPT-05	بهینه‌سازی سبد محصولات	بیشینه‌سازی حاشیه سود بر اساس قیمت‌های روز
-۴-۳ ماژول نگهداری پیش‌بینی‌کننده (FR-PM)
-شماره	الزام	شرح
-FR-PM-01	پایش وضعیت (CBM)	تحلیل ارتعاش، دما، فشار و اولتراسونیک
-FR-PM-02	پیش‌بینی خرابی	هدف‌گذاری ۸۲% کاهش توقفات ناگهانی
-FR-PM-03	نرخ تعمیرات پیش‌بینی‌شده	هدف‌گذاری > ۸۰%
-FR-PM-04	شبیه‌سازی STO	برنامه‌ریزی تعمیرات اساسی در محیط مجازی
-FR-PM-05	مدیریت قطعات یدکی	پیش‌بینی و تدارک هوشمند قطعات موردنیاز
-۴-۴ ماژول ایمنی، بهداشت و محیط زیست (FR-HSMS)
-شماره	الزام	شرح
-FR-HSMS-01	پایش لحظه‌ای آلاینده‌ها	اندازه‌گیری SOx، NOx، CO2، ذرات معلق
-FR-HSMS-02	کاهش انتشار کربن	هدف‌گذاری ۱۹% کاهش
-FR-HSMS-03	مدیریت مجوزهای کار (PTW)	صدور و کنترل دیجیتال مجوزها
-FR-HSMS-04	ثبت و تحلیل حوادث	تحلیل علل ریشه‌ای (RCA) با هوش مصنوعی
-FR-HSMS-05	انطباق با استانداردها	ممیزی خودکار انطباق با API RP 754
-۴-۵ ماژول آموزش و توانمندسازی (FR-TRN)
-شماره	الزام	شرح
-FR-TRN-01	شبیه‌ساز اپراتوری (OTS)	آموزش واکنش به ۵۰+ سناریوی بحرانی
-FR-TRN-02	دستیار هوش مصنوعی مولد	راهنمای بلادرنگ برای عیب‌یابی و به‌روزرسانی رویه‌ها
-FR-TRN-03	مدیریت دانش	بانک اطلاعاتی از تجربیات و بهترین‌رویه‌ها
-۴-۶ ماژول مالی و توسعه بازار (FR-FIN)
-شماره	الزام	شرح
-FR-FIN-01	هزینه‌یابی بلادرنگ	محاسبه بهای تمام‌شده هر محصول به‌صورت لحظه‌ای
-FR-FIN-02	داشبورد سود هر بشکه	نمایش حاشیه سود لحظه‌ای و پیش‌بینی روندها
-FR-FIN-03	شاخص شدت انرژی (EII)	پایش و بهبود EII با هدف < ۹۲.۵
-FR-FIN-04	شاخص‌های سرمایه‌گذاری	محاسبه OEE، RAF و قابلیت اطمینان برای جذب سرمایه‌گذار خارجی
-FR-FIN-05	تحلیل بازار بین‌الملل	مقایسه قیمت‌های جهانی با محصولات تولیدی
-۵. الزامات غیرکارکردی (Non-Functional Requirements)
-حوزه	الزام
-عملکرد	پاسخ‌دهی < ۳ ثانیه، تأخیر < ۵۰۰ میلی‌ثانیه
-در دسترس‌بودن	۹۹.۹۹% در دسترس بودن سالانه
-مقیاس‌پذیری	پشتیبانی از ۱۲ مجتمع با ۱۰۰+ دستگاه حیاتی هرکدام
-امنیت	انطباق با IEC 62443، رمزنگاری AES-256
-قابلیت نگهداری	معماری ماژولار، مستندسازی کامل API
-قابلیت تست	محیط تست جداگانه با داده‌های شبیه‌سازی‌شده
-بومی‌سازی	پشتیبانی کامل از زبان فارسی
-یکپارچه‌سازی	قابلیت اتصال به SAP، سیستم‌های DCS و ERP موجود
-۶. موارد استفاده کلیدی (Use Cases)
-شماره	سناریو	ورودی	خروجی
-UC-01	تشخیص خرابی قریب‌الوقوع کمپرسور	داده‌های ارتعاش، دما و فشار	هشدار ۲۰ دقیقه قبل + دستورالعمل تعمیر
-UC-02	بهینه‌سازی کوره تقطیر	ترکیب خوراک، دمای محیط، قیمت سوخت	تنظیمات بهینه نسبت سوخت به هوا و دمای خروجی
-UC-03	کاهش انتشار CO2	داده‌های انتشار لحظه‌ای	پیشنهاد سناریوهای کاهش + گزارش انطباق
-UC-04	آموزش اپراتور جدید	انتخاب سناریوی خرابی	شبیه‌سازی واقع‌گرایانه + ارزیابی عملکرد
-۷. داده‌های شبیه‌سازی‌شده (Synthetic Data)
-برای تست، آموزش مدل‌های هوش مصنوعی و اعتبارسنجی سامانه، داده‌های شبیه‌سازی‌شده به تعداد ۱۰۰,۰۰۰ رکورد برای یک واحد فرآیندی (مثلاً برج تقطیر اتمسفریک) تولید شده است.
+4. Functional Requirements
+4-1 Autonomous Monitoring Module (FR-MON)
+No.	Requirement	Description
+FR-MON-01	3D digital twin	360-degree view of the complex in full detail including 100+ critical components
+FR-MON-02	Heat map	Color-coded display (green/yellow/red) for equipment health status
+FR-MON-03	Predictive alerting	Anomaly detection and issuing a warning 12-25 minutes before failure
+FR-MON-04	Drone integration	Automatic flight planning for inspecting high-risk areas
+FR-MON-05	Soft sensors	Product quality prediction with 40+ virtual sensors
+4-2 Autonomous Optimization Module (FR-OPT)
+No.	Requirement	Description
+FR-OPT-01	Advanced APC	Automatic adjustment of process parameters every 1 minute
+FR-OPT-02	Real-time RTO	Scenario simulation with a convergence rate > 96%
+FR-OPT-03	Energy optimization	3-8% reduction in energy consumption by adjusting the fuel-to-air ratio
+FR-OPT-04	Intelligent catalyst management	Deactivation and replacement time prediction
+FR-OPT-05	Product portfolio optimization	Maximizing profit margin based on current prices
+4-3 Predictive Maintenance Module (FR-PM)
+No.	Requirement	Description
+FR-PM-01	Condition monitoring (CBM)	Vibration, temperature, pressure and ultrasonic analysis
+FR-PM-02	Failure prediction	Targeting an 82% reduction in sudden shutdowns
+FR-PM-03	Predicted maintenance rate	Target > 80%
+FR-PM-04	STO simulation	Turnaround planning in a virtual environment
+FR-PM-05	Spare parts management	Intelligent forecasting and procurement of required parts
+4-4 Health, Safety and Environment Module (FR-HSMS)
+No.	Requirement	Description
+FR-HSMS-01	Real-time pollutant monitoring	Measurement of SOx, NOx, CO2, particulate matter
+FR-HSMS-02	Carbon emission reduction	Targeting a 19% reduction
+FR-HSMS-03	Permit-to-work management (PTW)	Digital issuance and control of permits
+FR-HSMS-04	Incident recording and analysis	AI-based root cause analysis (RCA)
+FR-HSMS-05	Standards compliance	Automatic compliance audit against API RP 754
+4-5 Training and Empowerment Module (FR-TRN)
+No.	Requirement	Description
+FR-TRN-01	Operator training simulator (OTS)	Training response to 50+ critical scenarios
+FR-TRN-02	Generative AI assistant	Real-time guidance for troubleshooting and updating procedures
+FR-TRN-03	Knowledge management	Database of experiences and best practices
+4-6 Financial and Market Development Module (FR-FIN)
+No.	Requirement	Description
+FR-FIN-01	Real-time costing	Instantaneous calculation of the cost of each product
+FR-FIN-02	Profit-per-barrel dashboard	Display of instantaneous profit margin and trend forecasts
+FR-FIN-03	Energy Intensity Index (EII)	Monitoring and improving EII with a target < 92.5
+FR-FIN-04	Investment indicators	Calculation of OEE, RAF and reliability to attract foreign investors
+FR-FIN-05	International market analysis	Comparing global prices with manufactured products
+5. Non-Functional Requirements
+Area	Requirement
+Performance	Response time < 3 seconds, latency < 500 milliseconds
+Availability	99.99% annual availability
+Scalability	Support for 12 complexes with 100+ critical devices each
+Security	Compliance with IEC 62443, AES-256 encryption
+Maintainability	Modular architecture, complete API documentation
+Testability	Separate test environment with simulated data
+Localization	Full support for the Persian language
+Integration	Ability to connect to SAP, existing DCS and ERP systems
+6. Key Use Cases
+No.	Scenario	Input	Output
+UC-01	Detecting imminent compressor failure	Vibration, temperature and pressure data	Alert 20 minutes in advance + repair instructions
+UC-02	Distillation furnace optimization	Feed composition, ambient temperature, fuel price	Optimal fuel-to-air ratio and outlet temperature settings
+UC-03	CO2 emission reduction	Real-time emission data	Suggested reduction scenarios + compliance report
+UC-04	New operator training	Selection of a failure scenario	Realistic simulation + performance evaluation
+7. Simulated Data (Synthetic Data)
+For testing, training AI models and validating the system, simulated data of **100,000 records** has been generated for one process unit (e.g., an atmospheric distillation tower).
 
-ساختار داده‌ها
-ستون	شرح	محدوده
-timestamp	زمان ثبت داده	۲۰۲۴-۰۱-۰۱ ۰۰:۰۰:۰۰ تا ۲۰۲۴-۱۲-۳۱ ۲۳:۵۹:۵۹
-unit_id	شناسه واحد فرآیندی	"CDU-01"
-feed_flow	دبی خوراک ورودی (بشکه در روز)	۸۰,۰۰۰ - ۱۲۰,۰۰۰
-feed_temp	دمای خوراک ورودی (°C)	۳۵۰ - ۴۰۰
-column_pressure	فشار برج (psig)	۱۰ - ۱۵
-reflux_ratio	نسبت ریفلاکس	۱.۲ - ۲.۰
-reboiler_temp	دمای ریبویلر (°C)	۳۴۰ - ۳۸۰
-top_temp	دمای بالای برج (°C)	۱۲۰ - ۱۶۰
-bottom_temp	دمای پایین برج (°C)	۳۴۰ - ۳۷۰
-naphtha_yield	بازده نفتا (%)	۱۵ - ۲۵
-kerosene_yield	بازده نفت سفید (%)	۲۰ - ۳۰
-gasoil_yield	بازده گازوییل (%)	۳۰ - ۴۰
-residue_yield	بازده برجای‌مانده (%)	۵ - ۱۵
-energy_consumption	مصرف انرژی (GJ/روز)	۵۰,۰۰۰ - ۷۵,۰۰۰
-efficiency	راندمان کلی (%)	۸۵ - ۹۳
-co2_emission	انتشار CO2 (تن/روز)	۲۰۰ - ۳۵۰
-equipment_health	وضعیت سلامت تجهیزات	۰ (سالم) تا ۱ (خراب)
-alert_flag	آیا هشدار صادر شده؟	۰ یا ۱
-predicted_failure_hours	زمان پیش‌بینی‌شده تا خرابی (ساعت)	۰ - ۲۰۰
-کد Python برای تولید داده‌های سنتتیک
+Data Structure
+Column	Description	Range
+timestamp	Data recording time	2024-01-01 00:00:00 to 2024-12-31 23:59:59
+unit_id	Process unit identifier	"CDU-01"
+feed_flow	Feed inlet flow rate (barrels per day)	80,000 - 120,000
+feed_temp	Feed inlet temperature (°C)	350 - 400
+column_pressure	Column pressure (psig)	10 - 15
+reflux_ratio	Reflux ratio	1.2 - 2.0
+reboiler_temp	Reboiler temperature (°C)	340 - 380
+top_temp	Column top temperature (°C)	120 - 160
+bottom_temp	Column bottom temperature (°C)	340 - 370
+naphtha_yield	Naphtha yield (%)	15 - 25
+kerosene_yield	Kerosene yield (%)	20 - 30
+gasoil_yield	Gas oil yield (%)	30 - 40
+residue_yield	Residue yield (%)	5 - 15
+energy_consumption	Energy consumption (GJ/day)	50,000 - 75,000
+efficiency	Overall efficiency (%)	85 - 93
+co2_emission	CO2 emission (tons/day)	200 - 350
+equipment_health	Equipment health status	0 (healthy) to 1 (failed)
+alert_flag	Whether an alert was issued?	0 or 1
+predicted_failure_hours	Predicted time to failure (hours)	0 - 200
+Python Code for Generating Synthetic Data
 python
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 import random
 
-# تنظیمات اولیه
+# Initial settings
 np.random.seed(42)
 random.seed(42)
 
 def generate_synthetic_data(num_records=100000):
     """
-    تولید داده‌های سنتتیک برای واحد برج تقطیر اتمسفریک
+    Generate synthetic data for an atmospheric distillation tower unit
     
     Parameters:
-    num_records (int): تعداد رکوردهای مورد نیاز
+    num_records (int): number of records required
     
     Returns:
-    pd.DataFrame: داده‌های شبیه‌سازی‌شده
+    pd.DataFrame: simulated data
     """
     
     start_date = datetime(2024, 1, 1, 0, 0, 0)
     
-    # ایجاد تایم‌استمپ‌ها با فواصل ۵ دقیقه‌ای
+    # Create timestamps at 5-minute intervals
     timestamps = [start_date + timedelta(minutes=5*i) for i in range(num_records)]
     
-    # تولید پارامترهای ورودی با توزیع‌های واقع‌گرایانه
+    # Generate input parameters with realistic distributions
     
-    # دبی خوراک: روند فصلی + نویز
+    # Feed flow: seasonal trend + noise
     base_feed = 100000
-    seasonal_pattern = 10000 * np.sin(2 * np.pi * np.arange(num_records) / (365*24*12))  # تغییرات سالانه
+    seasonal_pattern = 10000 * np.sin(2 * np.pi * np.arange(num_records) / (365*24*12))  # annual variation
     noise_feed = np.random.normal(0, 3000, num_records)
     feed_flow = base_feed + seasonal_pattern + noise_feed
     feed_flow = np.clip(feed_flow, 80000, 120000)
     
-    # دمای خوراک: وابسته به دبی
+    # Feed temperature: dependent on flow
     feed_temp = 375 + 0.0001 * (feed_flow - 100000) + np.random.normal(0, 5, num_records)
     feed_temp = np.clip(feed_temp, 350, 400)
     
-    # فشار برج: نسبت معکوس با دبی
+    # Column pressure: inversely proportional to flow
     column_pressure = 12.5 - 0.00003 * (feed_flow - 100000) + np.random.normal(0, 0.5, num_records)
     column_pressure = np.clip(column_pressure, 10, 15)
     
-    # نسبت ریفلاکس: تابعی از دمای بالای برج
+    # Reflux ratio: a function of the column top temperature
     base_reflex = 1.6
     reflux_ratio = base_reflex + 0.005 * (feed_temp - 375) + np.random.normal(0, 0.1, num_records)
     reflux_ratio = np.clip(reflux_ratio, 1.2, 2.0)
     
-    # دمای ریبویلر: بهینه‌سازی شده بر اساس بازده
+    # Reboiler temperature: optimized based on yield
     reboiler_temp = 360 + 0.5 * (reflux_ratio - 1.6) * 10 + np.random.normal(0, 2, num_records)
     reboiler_temp = np.clip(reboiler_temp, 340, 380)
     
-    # دمای بالا و پایین برج
+    # Column top and bottom temperature
     top_temp = 140 + 0.3 * (reflux_ratio - 1.6) * 10 + np.random.normal(0, 3, num_records)
     top_temp = np.clip(top_temp, 120, 160)
     
     bottom_temp = 355 + 0.2 * (reboiler_temp - 360) + np.random.normal(0, 3, num_records)
     bottom_temp = np.clip(bottom_temp, 340, 370)
     
-    # بازده محصولات: مدل غیرخطی
-    # نفتا: با افزایش نسبت ریفلاکس افزایش می‌یابد
+    # Product yields: nonlinear model
+    # Naphtha: increases with the reflux ratio
     naphtha_yield = 18 + 2 * (reflux_ratio - 1.6) * 5 + np.random.normal(0, 1, num_records)
     naphtha_yield = np.clip(naphtha_yield, 15, 25)
     
-    # نفت سفید: تابعی از دمای بالای برج
+    # Kerosene: a function of the column top temperature
     kerosene_yield = 25 + 0.1 * (top_temp - 140) + np.random.normal(0, 1.5, num_records)
     kerosene_yield = np.clip(kerosene_yield, 20, 30)
     
-    # گازوییل: باقیمانده
+    # Gas oil: remainder
     gasoil_yield = 35 - 0.1 * (bottom_temp - 355) + np.random.normal(0, 2, num_records)
     gasoil_yield = np.clip(gasoil_yield, 30, 40)
     
-    # برجای‌مانده
+    # Residue
     residue_yield = 100 - (naphtha_yield + kerosene_yield + gasoil_yield) + np.random.normal(0, 0.5, num_records)
     residue_yield = np.clip(residue_yield, 5, 15)
     
-    # مصرف انرژی: تابعی از دبی و دمای خوراک
+    # Energy consumption: a function of feed flow and temperature
     energy_consumption = 60000 + 0.2 * (feed_flow - 100000) + 100 * (feed_temp - 375) + np.random.normal(0, 2000, num_records)
     energy_consumption = np.clip(energy_consumption, 50000, 75000)
     
-    # راندمان کلی: تابعی از نسبت ریفلاکس و دمای خوراک
+    # Overall efficiency: a function of reflux ratio and feed temperature
     efficiency = 88 + 0.5 * (reflux_ratio - 1.6) * 5 - 0.01 * (feed_temp - 375) * 2 + np.random.normal(0, 1, num_records)
     efficiency = np.clip(efficiency, 85, 93)
     
-    # انتشار CO2: وابسته به مصرف انرژی
+    # CO2 emission: dependent on energy consumption
     co2_emission = 250 + 0.003 * (energy_consumption - 60000) + np.random.normal(0, 10, num_records)
     co2_emission = np.clip(co2_emission, 200, 350)
     
-    # وضعیت سلامت تجهیزات: تخریب تدریجی با نویز
-    degradation_trend = np.linspace(0, 0.7, num_records)  # تخریب در طول زمان
+    # Equipment health status: gradual degradation with noise
+    degradation_trend = np.linspace(0, 0.7, num_records)  # degradation over time
     health_noise = np.random.normal(0, 0.05, num_records)
     equipment_health = degradation_trend + health_noise
     equipment_health = np.clip(equipment_health, 0, 1)
     
-    # هشدار: زمانی که سلامت تجهیزات از ۰.۸ عبور کند
+    # Alert: when equipment health exceeds 0.8
     alert_flag = (equipment_health > 0.8).astype(int)
     
-    # زمان پیش‌بینی‌شده تا خرابی: تابعی از سلامت تجهیزات
+    # Predicted time to failure: a function of equipment health
     predicted_failure_hours = 200 * (1 - equipment_health) + np.random.normal(0, 10, num_records)
     predicted_failure_hours = np.clip(predicted_failure_hours, 0, 200)
     
-    # ایجاد دیتافریم
+    # Create the dataframe
     df = pd.DataFrame({
         'timestamp': timestamps,
         'unit_id': 'CDU-01',
@@ -274,46 +274,46 @@ def generate_synthetic_data(num_records=100000):
     
     return df
 
-# تولید داده‌ها
-print("⏳ در حال تولید ۱۰۰,۰۰۰ رکورد داده سنتتیک...")
+# Generate the data
+print("⏳ Generating 100,000 synthetic data records...")
 df_synthetic = generate_synthetic_data(num_records=100000)
 
-# نمایش اطلاعات آماری
-print("\n📊 آمار توصیفی داده‌های تولید شده:")
+# Show statistical information
+print("\n📊 Descriptive statistics of the generated data:")
 print(df_synthetic.describe())
 
-# نمایش ۵ رکورد اول
-print("\n📋 نمونه داده‌ها (۵ رکورد اول):")
+# Show the first 5 records
+print("\n📋 Sample data (first 5 records):")
 print(df_synthetic.head())
 
-# ذخیره در فایل CSV
+# Save to CSV file
 df_synthetic.to_csv('synthetic_refinery_data.csv', index=False)
-print("\n✅ داده‌ها با موفقیت در فایل 'synthetic_refinery_data.csv' ذخیره شدند.")
+print("\n✅ Data saved successfully to file 'synthetic_refinery_data.csv'.")
 
-# توزیع هشدارها
-print("\n🚨 توزیع هشدارها:")
+# Alert distribution
+print("\n🚨 Alert distribution:")
 alert_dist = df_synthetic['alert_flag'].value_counts()
-print(f"بدون هشدار: {alert_dist[0]} رکورد ({alert_dist[0]/len(df_synthetic)*100:.2f}%)")
-print(f"با هشدار: {alert_dist[1]} رکورد ({alert_dist[1]/len(df_synthetic)*100:.2f}%)")
+print(f"No alert: {alert_dist[0]} records ({alert_dist[0]/len(df_synthetic)*100:.2f}%)")
+print(f"With alert: {alert_dist[1]} records ({alert_dist[1]/len(df_synthetic)*100:.2f}%)")
 
-# همبستگی بین پارامترها
-print("\n🔗 ماتریس همبستگی (۱۰ پارامتر اصلی):")
+# Correlation between parameters
+print("\n🔗 Correlation matrix (10 main parameters):")
 corr_cols = ['feed_flow', 'feed_temp', 'column_pressure', 'reflux_ratio', 
              'reboiler_temp', 'top_temp', 'bottom_temp', 'energy_consumption', 
              'efficiency', 'co2_emission', 'equipment_health']
 print(df_synthetic[corr_cols].corr().round(2))
 
-# بررسی کیفیت داده‌ها
-print("\n🔍 بررسی کیفیت داده‌ها:")
-print(f"تعداد رکوردها: {len(df_synthetic)}")
-print(f"تعداد رکوردهای تکراری: {df_synthetic.duplicated().sum()}")
-print(f"تعداد مقادیر گم‌شده: {df_synthetic.isnull().sum().sum()}")
-print(f"محدوده تاریخ: {df_synthetic['timestamp'].min()} تا {df_synthetic['timestamp'].max()}")
-خروجی نمونه از کد بالا
+# Data quality check
+print("\n🔍 Data quality check:")
+print(f"Number of records: {len(df_synthetic)}")
+print(f"Number of duplicate records: {df_synthetic.duplicated().sum()}")
+print(f"Number of missing values: {df_synthetic.isnull().sum().sum()}")
+print(f"Date range: {df_synthetic['timestamp'].min()} to {df_synthetic['timestamp'].max()}")
+Sample Output of the Above Code
 text
-⏳ در حال تولید ۱۰۰,۰۰۰ رکورد داده سنتتیک...
+⏳ Generating 100,000 synthetic data records...
 
-📊 آمار توصیفی داده‌های تولید شده:
+📊 Descriptive statistics of the generated data:
           feed_flow   feed_temp  ...  equipment_health  predicted_failure_hours
 count  100000.0000  100000.0000  ...       100000.0000            100000.0000
 mean    99979.2535     374.9979  ...            0.3498               130.0348
@@ -324,7 +324,7 @@ min     80585.7000     350.1000  ...            0.0000                 0.0000
 75%    103414.1000     378.5000  ...            0.5247               159.8000
 max    119911.6000     399.9000  ...            0.9999               200.0000
 
-📋 نمونه داده‌ها (۵ رکورد اول):
+📋 Sample data (first 5 records):
             timestamp unit_id  feed_flow  ... equipment_health  alert_flag  predicted_failure_hours
 0 2024-01-01 00:00:00  CDU-01   99820.6  ...          0.0032           0                     199.4
 1 2024-01-01 00:05:00  CDU-01  101420.1  ...          0.0056           0                     199.0
@@ -334,13 +334,13 @@ max    119911.6000     399.9000  ...            0.9999               200.0000
 
 [5 rows x 19 columns]
 
-✅ داده‌ها با موفقیت در فایل 'synthetic_refinery_data.csv' ذخیره شدند.
+✅ Data saved successfully to file 'synthetic_refinery_data.csv'.
 
-🚨 توزیع هشدارها:
-بدون هشدار: 50165 رکورد (50.17%)
-با هشدار: 49835 رکورد (49.83%)
+🚨 Alert distribution:
+No alert: 50165 records (50.17%)
+With alert: 49835 records (49.83%)
 
-🔗 ماتریس همبستگی (۱۰ پارامتر اصلی):
+🔗 Correlation matrix (10 main parameters):
                     feed_flow  feed_temp  ...  co2_emission  equipment_health
 feed_flow             1.00       0.26  ...         -0.02            -0.01
 feed_temp             0.26       1.00  ...          0.04             0.00
@@ -354,24 +354,24 @@ efficiency           -0.01      -0.08  ...         -0.21             0.00
 co2_emission         -0.02       0.04  ...          1.00             0.00
 equipment_health     -0.01       0.00  ...          0.00             1.00
 
-🔍 بررسی کیفیت داده‌ها:
-تعداد رکوردها: 100000
-تعداد رکوردهای تکراری: 0
-تعداد مقادیر گم‌شده: 0
-محدوده تاریخ: 2024-01-01 00:00:00 تا 2024-12-30 11:55:00
-۸. جمع‌بندی و نتیجه‌گیری
-سامانه IA-RPPMS با ترکیب بهترین‌های جهانی در حوزه هوشمندسازی صنایع فرآیندی، یک پلتفرم جامع و خودمختار ارائه می‌دهد که:
+🔍 Data quality check:
+Number of records: 100000
+Number of duplicate records: 0
+Number of missing values: 0
+Date range: 2024-01-01 00:00:00 to 2024-12-30 11:55:00
+8. Summary and Conclusion
+By combining the best of the world in the intelligentization of process industries, the **IA-RPPMS** system offers a comprehensive and autonomous platform that:
 
-پوشش کامل الزامات عملیاتی شامل مانیتورینگ، بهینه‌سازی، نگهداری، ایمنی، آموزش و مالی
+Fully covers operational requirements including monitoring, optimization, maintenance, safety, training and finance
 
-مبتنی بر بنچ‌مارک جهانی از پروژه‌های موفق SOCAR، سینوپک، پترومیدیا، لانژو و توتال‌انرژیز
+Is based on a global benchmark of successful projects from SOCAR, Sinopec, Petromedia, Lanzhou and TotalEnergies
 
-قابل ارتقا در ۵ سطح خودمختاری از سطح ۰ (دستی) تا سطح ۵ (خودگردان کامل)
+Is upgradable across 5 levels of autonomy from level 0 (manual) to level 5 (fully autonomous)
 
-همراه با داده‌های شبیه‌سازی‌شده برای آموزش و تست مدل‌های هوش مصنوعی
+Comes with simulated data for training and testing AI models
 
-مناسب برای ۱۲ پالایشگاه دولتی و پتروشیمی‌های کشور با قابلیت سفارشی‌سازی برای هر مجتمع
+Suitable for the 12 state-owned refineries and petrochemicals of the country with customization for each complex
 
-حامی توسعه بازار بین‌الملل از طریق ارائه شاخص‌های عملکردی شفاف و قابل قبول برای سرمایه‌گذاران خارجی
+Supports international market development by providing transparent and acceptable performance indicators for foreign investors
 
-با پیاده‌سازی این سامانه، ایران گامی بلند در جهت تحول دیجیتال صنعت نفت و گاز برداشته و به جمع پیشگامان جهانی هوشمندسازی صنایع پالایشی خواهد پیوست.
+With the implementation of this system, Iran will take a major step toward the **digital transformation of the oil and gas industry** and join the world's pioneers in the intelligentization of refining industries.

@@ -1,117 +1,117 @@
-# معرفی سامانه‌های DCS/SIS برای تکمیل لایه‌ی کنترل واقعی «اپراتور هوشمند»
+# Introduction to DCS/SIS Systems to Complete the Real Control Layer of the "Smart Operator"
 
-## ۱. چرا این سند لازم است
+## 1. Why This Document Is Needed
 
-ماژول «اپراتور هوشمند» در داشبورد Smart Refinery در حال حاضر یک **لایه‌ی تصمیم‌یار و پایش** است: با
-داده‌ی شبیه‌سازی‌شده کار می‌کند، منطق سوییچ به تجهیز زاپاس را نمایش می‌دهد، و یک هوک وب‌هوک واقعی
-(`/settings` → Automation Webhook URL) دارد که می‌تواند رویداد را به‌صورت HTTP POST به هر سیستم خارجی
-اطلاع دهد. اما **این داشبورد هرگز نباید مستقیماً فرمان روشن/خاموش کردن تجهیز فیزیکی واقعی صادر کند**،
-چون این کار در حوزه‌ی **کنترل صنعتی ایمنی-محور (Safety Instrumented System / DCS)** قرار می‌گیرد که
-نیازمند سخت‌افزار گواهی‌شده، چرخه‌ی عمر مهندسی ایمنی طبق IEC 61511، و مسئولیت‌پذیری قانونی/بیمه‌ای
-جداگانه‌ای است. یک اپ وب که به‌اشتباه بتواند پمپ/کمپرسور واقعی را خاموش یا روشن کند، بدون طی این فرآیند،
-می‌تواند منجر به حادثه‌ی ایمنی واقعی شود.
+The "Smart Operator" module in the Smart Refinery dashboard is currently a **decision-support and monitoring layer**: it
+works with simulated data, displays the logic of switching to standby equipment, and has a real webhook hook
+(`/settings` → Automation Webhook URL) that can notify any external system of an event via HTTP POST.
+However, **this dashboard must never directly issue a command to start/stop real physical equipment**,
+because that falls within the domain of **safety-oriented industrial control (Safety Instrumented System / DCS)**, which
+requires certified hardware, a safety engineering lifecycle per IEC 61511, and separate legal/insurance
+accountability. A web app that could mistakenly stop or start a real pump/compressor without going through this process
+could lead to a real safety incident.
 
-این سند برای معرفی **محصولات واقعی و معتبر بازار** تهیه شده تا تیم فنی/تدارکات پترو پالاتوس بتواند
-گزینه‌ی مناسب را برای تهیه، مناقصه و یکپارچه‌سازی واقعی انتخاب کند. داشبورد Smart Refinery در این
-معماری، لایه‌ی **HMI/دیدبانی + توصیه‌گر هوشمند** باقی می‌ماند؛ فرمان‌دهی فیزیکی واقعی را DCS/SIS
-گواهی‌شده انجام می‌دهد.
+This document was prepared to introduce **real and reputable market products** so that the Petro Palatos technical/procurement team can
+select the right option for real procurement, tender and integration. In this
+architecture, the Smart Refinery dashboard remains the **HMI/monitoring + intelligent advisor** layer; real physical commanding is performed by the certified DCS/SIS.
+.
 
 ---
 
-## ۲. تفاوت DCS و SIS (خلاصه)
+## 2. DCS vs. SIS Difference (Summary)
 
 | | DCS (Distributed Control System) | SIS (Safety Instrumented System) |
 |---|---|---|
-| نقش | کنترل پیوسته‌ی فرآیند (PID، توالی، بهینه‌سازی) | مداخله‌ی ایمنی مستقل هنگام عبور از حد بحرانی (trip/shutdown) |
-| استقلال | معمولاً به کنترل عادی متصل است | باید **کاملاً مستقل** از DCS باشد (طبق IEC 61511) |
-| استاندارد گواهی | IEC 61508 / IEC 62443 (امنیت) | IEC 61508 + IEC 61511، با رتبه‌ی **SIL** (۱ تا ۴) |
-| مثال کاربرد در این پروژه | تنظیم نقطه‌کار CDU، حلقه‌های APC/RTO (همان چیزی که صفحه‌ی Optimization به‌صورت شبیه‌سازی نشان می‌دهد) | تریپ خودکار پمپ خراب و ورود پمپ زاپاس (همان چیزی که Auto Operator به‌صورت شبیه‌سازی نشان می‌دهد) |
+| Role | Continuous process control (PID, sequence, optimization) | Independent safety intervention when a critical limit is crossed (trip/shutdown) |
+| Independence | Usually connected to normal control | Must be **completely independent** of the DCS (per IEC 61511) |
+| Certification standard | IEC 61508 / IEC 62443 (security) | IEC 61508 + IEC 61511, with a **SIL** rating (1 to 4) |
+| Example use in this project | Setting the CDU operating point, APC/RTO loops (what the Optimization page shows as a simulation) | Automatic trip of a failed pump and bringing in the standby pump (what Auto Operator shows as a simulation) |
 
-نکته‌ی مهم: منطق «اپراتور هوشمند» در این پروژه از نظر مفهومی به SIS نزدیک‌تر است (پاسخ خودکار به یک
-خرابی)، پس تصمیم نهایی و اجرای فیزیکی باید از یک SIS گواهی‌شده عبور کند، نه مستقیماً از این اپ وب.
-
----
-
-## ۳. محصولات معتبر DCS (برای لایه‌ی کنترل و بهینه‌سازی)
-
-| فروشنده | محصول | نکات |
-|---|---|---|
-| Honeywell | Experion PKS | پرکاربرد در پالایشگاه‌های خاورمیانه؛ APC/RTO تحت برند Profit Suite |
-| Yokogawa | CENTUM VP | سابقه‌ی طولانی در صنایع نفت و گاز؛ Exaquantum برای هیستوریان |
-| Emerson | DeltaV | معماری ماژولار، یکپارچگی قوی با ابزار دقیق Emerson (Rosemount) |
-| ABB | System 800xA | یکپارچگی DCS + Electrical + Safety در یک پلتفرم |
-| Siemens | SIMATIC PCS 7 | مناسب واحدهای کوچک‌تر تا متوسط، هزینه‌ی رقابتی |
-| Schneider Electric | EcoStruxure Foundation / Quantum | گزینه‌ی مقرون‌به‌صرفه‌تر برای توسعه‌ی تدریجی |
-
-## ۴. محصولات معتبر SIS (برای لایه‌ی ایمنی و تریپ خودکار)
-
-| فروشنده | محصول | رتبه‌ی SIL قابل پشتیبانی |
-|---|---|---|
-| Schneider Electric (ex-Invensys) | Triconex Tricon / TriStation | تا SIL 3 |
-| Honeywell | Safety Manager | تا SIL 3 |
-| HIMA | HIMax / HIQuad X | تا SIL 3، معماری قابل تنظیم برای پروژه‌های بزرگ |
-| ABB | Safety AC 800M High Integrity | تا SIL 3، یکپارچه با System 800xA |
-| Yokogawa | ProSafe-RS | تا SIL 3، یکپارچه با CENTUM VP |
-| Siemens | SIMATIC S7-1500F / S7-400F | تا SIL 3، مقیاس‌پذیر برای واحدهای کوچک‌تر |
-
-انتخاب بین این گزینه‌ها معمولاً بر اساس: DCS نصب‌شده‌ی فعلی در پالایشگاه (برای یکپارچگی)، در دسترس
-بودن پشتیبانی محلی/نمایندگی در ایران، و سابقه‌ی تحریم/تأمین قطعات باید بررسی شود — این مورد آخر برای
-پروژه‌های داخل ایران اهمیت ویژه دارد و نیاز به استعلام مستقیم از نمایندگی‌ها یا بررسی جایگزین‌های
-بومی/چینی (مانند برخی راهکارهای Emerson/Honeywell از طریق نمایندگی، یا گزینه‌های محلی) دارد.
+Important note: the "Smart Operator" logic in this project is conceptually closer to a SIS (automatic response to a
+failure), so the final decision and physical execution must go through a certified SIS, not directly from this web app.
 
 ---
 
-## ۵. معماری پیشنهادی یکپارچه‌سازی با داشبورد Smart Refinery
+## 3. Reputable DCS Products (for the control and optimization layer)
+
+| Vendor | Product | Notes |
+|---|---|---|
+| Honeywell | Experion PKS | Widely used in Middle East refineries; APC/RTO under the Profit Suite brand |
+| Yokogawa | CENTUM VP | Long track record in the oil and gas industries; Exaquantum for historian |
+| Emerson | DeltaV | Modular architecture, strong integration with Emerson instrumentation (Rosemount) |
+| ABB | System 800xA | Integration of DCS + Electrical + Safety in one platform |
+| Siemens | SIMATIC PCS 7 | Suitable for small to medium units, competitive cost |
+| Schneider Electric | EcoStruxure Foundation / Quantum | A more cost-effective option for gradual expansion |
+
+## 4. Reputable SIS Products (for the safety and automatic trip layer)
+
+| Vendor | Product | Supported SIL rating |
+|---|---|---|
+| Schneider Electric (ex-Invensys) | Triconex Tricon / TriStation | Up to SIL 3 |
+| Honeywell | Safety Manager | Up to SIL 3 |
+| HIMA | HIMax / HIQuad X | Up to SIL 3, configurable architecture for large projects |
+| ABB | Safety AC 800M High Integrity | Up to SIL 3, integrated with System 800xA |
+| Yokogawa | ProSafe-RS | Up to SIL 3, integrated with CENTUM VP |
+| Siemens | SIMATIC S7-1500F / S7-400F | Up to SIL 3, scalable for smaller units |
+
+The choice among these options is usually based on: the refinery's currently installed DCS (for integration), the availability
+of local support/representation in Iran, and the history of sanctions/parts supply must be checked — this last item is
+of particular importance for projects inside Iran and requires direct inquiry with the representatives or consideration of
+local/Chinese alternatives (such as some Emerson/Honeywell solutions through a representative, or local options).
+
+---
+
+## 5. Proposed Architecture for Integration with the Smart Refinery Dashboard
 
 ```
-[ سنسورها / پمپ و کمپرسور واقعی ]
+[ Real sensors / pump and compressor ]
             │
             ▼
-   [ SIS گواهی‌شده — مثلاً Triconex ]  ──── تصمیم و فرمان فیزیکی نهایی همیشه اینجاست
-            │  (وضعیت / رویداد)
+   [ Certified SIS — e.g., Triconex ]  ──── the final decision and physical command are always here
+            │  (status / event)
             ▼
-   [ DCS (مثلاً Experion PKS) ] ──── کنترل پیوسته + APC/RTO واقعی
+   [ DCS (e.g., Experion PKS) ] ──── continuous control + real APC/RTO
             │  (OPC-UA / MQTT / REST)
             ▼
-   [ Historian / Middleware — مثلاً OSIsoft PI, AVEVA Historian ]
+   [ Historian / Middleware — e.g., OSIsoft PI, AVEVA Historian ]
             │
             ▼
-   [ Smart Refinery Dashboard (این پروژه) ]
-      - می‌خواند: وضعیت زنده، هشدارها، RUL، دیتای فرآیندی
-      - می‌نویسد فقط: پیشنهاد/درخواست (نه فرمان مستقیم) از طریق
-        Automation Webhook → به یک سرویس میانی که تحت نظارت SIS/DCS
-        اجرای واقعی را انجام می‌دهد (نه این اپ به‌تنهایی)
+   [ Smart Refinery Dashboard (this project) ]
+      - Reads: live status, alarms, RUL, process data
+      - Writes only: suggestion/request (not a direct command) through
+        Automation Webhook → to an intermediate service that, under SIS/DCS supervision,
+        performs the actual execution (not this app alone)
 ```
 
-نکته‌ی کلیدی: وب‌هوکی که همین حالا در `/settings` این پروژه پیاده شده، دقیقاً برای همین منظور طراحی
-شده — نقطه‌ی اتصال به یک Middleware واقعی، نه اتصال مستقیم به تجهیز.
+Key point: the webhook already implemented in `/settings` of this project is designed exactly for this purpose
+— the connection point to a real Middleware, not a direct connection to equipment.
 
 ---
 
-## ۶. فرآیند تدارک و پیاده‌سازی (بر اساس چرخه‌ی عمر ایمنی IEC 61511)
+## 6. Procurement and Implementation Process (based on the IEC 61511 safety lifecycle)
 
-1. **HAZOP / LOPA** روی واحدهای هدف (پمپ خوراک، پمپ آب خنک‌کننده، کمپرسور گاز برگشتی) برای تعیین
-   سناریوهای خطر و نرخ کاهش ریسک لازم.
-2. **تعیین SIL مورد نیاز** برای هر SIF (Safety Instrumented Function) — مثلاً «سوییچ خودکار پمپ زاپاس»
-   ممکن است SIL 1 یا SIL 2 باشد بسته به نتیجه‌ی LOPA.
-3. **تدوین SRS ایمنی** (Safety Requirements Specification) — سندی مجزا از این README، مخصوص الزامات
-   ایمنی، طبق فرمت IEC 61511.
-4. **مناقصه و انتخاب فروشنده** از جدول بالا، بر اساس یکپارچگی با DCS موجود و پشتیبانی محلی.
-5. **طراحی تفصیلی، FAT (Factory Acceptance Test)، SAT (Site Acceptance Test)**.
-6. **راه‌اندازی و Proof Testing دوره‌ای** طبق برنامه‌ی نگهداری ایمنی.
-7. **یکپارچه‌سازی نرم‌افزاری** با این داشبورد: پیکربندی همان Automation Webhook برای دریافت رویدادهای
-   واقعی از Middleware، و در صورت نیاز افزودن یک اتصال OPC-UA/REST برای خواندن وضعیت زنده‌ی واقعی
-   به‌جای داده‌ی شبیه‌سازی‌شده‌ی فعلی (`src/data/mockData.ts`).
+1. **HAZOP / LOPA** on the target units (feed pump, cooling water pump, recycle gas compressor) to determine
+   hazard scenarios and the required risk reduction rate.
+2. **Determine the required SIL** for each SIF (Safety Instrumented Function) — e.g., "automatic switch to standby pump"
+   may be SIL 1 or SIL 2 depending on the LOPA result.
+3. **Develop the safety SRS** (Safety Requirements Specification) — a document separate from this README, specific to safety
+   requirements, per the IEC 61511 format.
+4. **Tender and vendor selection** from the table above, based on integration with the existing DCS and local support.
+5. **Detailed design, FAT (Factory Acceptance Test), SAT (Site Acceptance Test)**.
+6. **Commissioning and periodic Proof Testing** per the safety maintenance plan.
+7. **Software integration** with this dashboard: configure the same Automation Webhook to receive real events
+   from the Middleware and, if needed, add an OPC-UA/REST connection to read the real live status
+   instead of the current simulated data (`src/data/mockData.ts`).
 
-این یک پروژه‌ی سرمایه‌ای (Capital Project) با مقیاس معمول چند ماه تا بیش از یک سال است، نه یک افزونه‌ی
-نرم‌افزاری سریع — برآورد زمان و هزینه باید از فروشنده‌ی منتخب و بر اساس تعداد SIF ها استعلام شود.
+This is a Capital Project with a typical scale of several months to more than a year, not a quick software
+add-on — time and cost estimates must be requested from the selected vendor based on the number of SIFs.
 
 ---
 
-## ۷. جمع‌بندی و توصیه
+## 7. Summary and Recommendation
 
-- داشبورد فعلی را به‌عنوان **لایه‌ی HMI/تصمیم‌یار** حفظ کنید؛ آن را جایگزین DCS/SIS نکنید.
-- برای شروع، یک SIS با پشتیبانی محلی قوی و سابقه‌ی نصب در پالایشگاه‌های ایران در اولویت باشد (نیاز به
-  استعلام مستقیم نمایندگی‌ها دارد).
-- اتصال واقعی از طریق همان Automation Webhook که در این نسخه پیاده‌سازی شده آغاز شود: ابتدا فقط برای
-  **دریافت اعلان** (یک‌طرفه، امن)، و تنها پس از تأیید ایمنی کامل، برای هرگونه تعامل دوطرفه.
+- Keep the current dashboard as the **HMI/decision-support layer**; do not replace the DCS/SIS with it.
+- To start, prioritize a SIS with strong local support and a track record of installation in Iranian refineries (requires
+  direct inquiry with representatives).
+- Begin the real connection through the same Automation Webhook implemented in this version: first only for
+  **receiving notifications** (one-way, secure), and only after full safety approval, for any two-way interaction.

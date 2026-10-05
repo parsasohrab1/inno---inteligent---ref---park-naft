@@ -9,10 +9,10 @@ interface HseStripProps {
 
 export function HseStrip({ daysSinceIncident, flaringM3, emissionsCo2Tpd, hseComplianceScore }: HseStripProps) {
   const items = [
-    { icon: Timer, label: "Days Since Incident", labelFa: "روز بدون حادثه", value: daysSinceIncident, color: "var(--status-good)" },
-    { icon: Flame, label: "Flaring", labelFa: "فلر", value: `${flaringM3.toLocaleString()} m³`, color: "var(--status-warning)" },
-    { icon: Wind, label: "CO₂ Emissions", labelFa: "انتشار CO₂", value: `${emissionsCo2Tpd} t/d`, color: "var(--series-7)" },
-    { icon: ShieldCheck, label: "HSE Compliance", labelFa: "انطباق ایمنی", value: `${hseComplianceScore}%`, color: "var(--brand)" },
+    { icon: Timer, label: "Days Since Incident", labelFa: "Days without incident", value: daysSinceIncident, color: "var(--status-good)" },
+    { icon: Flame, label: "Flaring", labelFa: "Flare", value: `${flaringM3.toLocaleString()} m³`, color: "var(--status-warning)" },
+    { icon: Wind, label: "CO₂ Emissions", labelFa: "CO₂ emissions", value: `${emissionsCo2Tpd} t/d`, color: "var(--series-7)" },
+    { icon: ShieldCheck, label: "HSE Compliance", labelFa: "Safety compliance", value: `${hseComplianceScore}%`, color: "var(--brand)" },
   ];
 
   return (

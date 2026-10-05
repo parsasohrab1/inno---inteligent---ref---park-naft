@@ -41,7 +41,7 @@ export function ValueCounter() {
           Value generated today by Smart Refinery
         </div>
         <p className="text-[11px] mt-1" style={{ color: "var(--text-muted)" }}>
-          صرفه‌جویی امروز ناشی از بهینه‌سازی، سوییچ خودکار و نگهداری پیشگیرانه
+          Today's savings from optimization, automatic switching and preventive maintenance
         </p>
       </div>
       <div className="text-right">

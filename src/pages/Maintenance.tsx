@@ -4,10 +4,10 @@ import { useProcessUnits } from "@/hooks/useProcessUnits";
 import type { ProcessUnit } from "@/types";
 
 function healthBand(rulPct: number): { label: string; labelFa: string; color: string } {
-  if (rulPct < 10) return { label: "Critical — replace now", labelFa: "بحرانی — تعویض فوری", color: "var(--status-critical)" };
-  if (rulPct < 20) return { label: "Plan replacement", labelFa: "برنامه‌ریزی تعویض", color: "var(--status-serious)" };
-  if (rulPct < 50) return { label: "Monitor closely", labelFa: "پایش دقیق", color: "var(--status-warning)" };
-  return { label: "Healthy", labelFa: "سالم", color: "var(--status-good)" };
+  if (rulPct < 10) return { label: "Critical — replace now", labelFa: "Critical — immediate replacement", color: "var(--status-critical)" };
+  if (rulPct < 20) return { label: "Plan replacement", labelFa: "Plan replacement", color: "var(--status-serious)" };
+  if (rulPct < 50) return { label: "Monitor closely", labelFa: "Close monitoring", color: "var(--status-warning)" };
+  return { label: "Healthy", labelFa: "Healthy", color: "var(--status-good)" };
 }
 
 function RulRow({ unit }: { unit: ProcessUnit }) {
@@ -79,7 +79,7 @@ export function Maintenance() {
 
         <Panel
           title="Remaining Useful Life (RUL) by Asset"
-          subtitle="عمر مفید باقی‌مانده تجهیزات — مرتب‌شده از بحرانی‌ترین به سالم‌ترین"
+          subtitle="Remaining useful life of equipment — sorted from most critical to healthiest"
         >
           <div className="divide-y -mx-1 px-1" style={{ borderColor: "var(--border)" }}>
             {sorted.map((unit) => (
@@ -88,7 +88,7 @@ export function Maintenance() {
           </div>
         </Panel>
 
-        <Panel title="How this works" subtitle="روش محاسبه">
+        <Panel title="How this works" subtitle="Calculation method">
           <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             Each asset's RUL degrades over time based on simulated wear (vibration, temperature,
             and duty-cycle trends in a real deployment). Crossing 20% raises a preventive

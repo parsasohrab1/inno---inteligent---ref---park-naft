@@ -7,11 +7,11 @@ export function Hse() {
   return (
     <Layout>
       <div className="space-y-5 max-w-[1600px] mx-auto">
-        <Panel title="HSE & Sustainability" subtitle="ایمنی، بهداشت و محیط‌زیست">
+        <Panel title="HSE & Sustainability" subtitle="Health, safety and environment">
           <HseStrip {...safety} />
         </Panel>
 
-        <Panel title="Compliance Notes" subtitle="یادداشت‌های انطباق">
+        <Panel title="Compliance Notes" subtitle="Compliance notes">
           <ul className="space-y-2 text-xs" style={{ color: "var(--text-secondary)" }}>
             <li>
               Flaring and CO₂ figures are reported daily against the site environmental permit

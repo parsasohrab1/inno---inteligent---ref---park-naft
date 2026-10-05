@@ -46,7 +46,7 @@ export function ProcessUnitsProvider({ children }: { children: ReactNode }) {
           tag: unit.tag,
           unit: unit.area,
           message: `${unit.name} tripped — remaining useful life exhausted`,
-          messageFa: `${unit.nameFa} از مدار خارج شد — عمر مفید به پایان رسید`,
+          messageFa: `${unit.nameFa} was taken out of service — useful life ended`,
           severity: "critical",
         });
       }
@@ -79,7 +79,7 @@ export function ProcessUnitsProvider({ children }: { children: ReactNode }) {
               tag: unit.tag,
               unit: unit.area,
               message: `${unit.name} tripped — remaining useful life exhausted`,
-              messageFa: `${unit.nameFa} از مدار خارج شد — عمر مفید به پایان رسید`,
+              messageFa: `${unit.nameFa} was taken out of service — useful life ended`,
               severity: "critical",
             });
             return { ...unit, rulPct: 0, rulDays: 0, status: "fault" as UnitStatus, load: 0 };
@@ -93,7 +93,7 @@ export function ProcessUnitsProvider({ children }: { children: ReactNode }) {
                 tag: unit.tag,
                 unit: unit.area,
                 message: `Urgent: schedule replacement for ${unit.name} — RUL ${nextRul.toFixed(0)}%`,
-                messageFa: `فوری: تعویض ${unit.nameFa} را برنامه‌ریزی کنید — عمر مفید باقی‌مانده ${nextRul.toFixed(0)}٪`,
+                messageFa: `Urgent: plan replacement of ${unit.nameFa} — remaining useful life ${nextRul.toFixed(0)}%`,
                 severity: "serious",
               });
             }
@@ -105,7 +105,7 @@ export function ProcessUnitsProvider({ children }: { children: ReactNode }) {
                 tag: unit.tag,
                 unit: unit.area,
                 message: `Preventive maintenance recommended for ${unit.name} — RUL ${nextRul.toFixed(0)}%`,
-                messageFa: `پیشنهاد نگهداری پیشگیرانه برای ${unit.nameFa} — عمر مفید باقی‌مانده ${nextRul.toFixed(0)}٪`,
+                messageFa: `Preventive maintenance suggestion for ${unit.nameFa} — remaining useful life ${nextRul.toFixed(0)}%`,
                 severity: "warning",
               });
             }

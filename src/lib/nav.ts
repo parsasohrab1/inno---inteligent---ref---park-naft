@@ -22,24 +22,24 @@ export interface NavItem {
 }
 
 export const navItems: NavItem[] = [
-  { path: "/", icon: LayoutDashboard, label: "Overview", labelFa: "نمای کلی", subtitleFa: "نمای کلی پالایشگاه — Park Naft Site" },
-  { path: "/units", icon: Factory, label: "Process Units", labelFa: "واحدهای فرآیندی", subtitleFa: "وضعیت زنده واحدهای فرآیندی" },
-  { path: "/trends", icon: Gauge, label: "Trends", labelFa: "روندها", subtitleFa: "روندهای دما، فشار و دبی" },
-  { path: "/tanks", icon: Fuel, label: "Tanks & Storage", labelFa: "مخازن", subtitleFa: "سطح و ظرفیت مخازن ذخیره‌سازی" },
-  { path: "/alarms", icon: Siren, label: "Alarms", labelFa: "هشدارها", subtitleFa: "هشدارها و رویدادهای فرآیندی" },
-  { path: "/hse", icon: ShieldCheck, label: "HSE", labelFa: "ایمنی و محیط‌زیست", subtitleFa: "ایمنی، بهداشت، محیط‌زیست و پایداری" },
-  { path: "/auto-operator", icon: Bot, label: "Auto Operator", labelFa: "اپراتور هوشمند", subtitleFa: "سوییچ خودکار به تجهیزات زاپاس" },
-  { path: "/maintenance", icon: Wrench, label: "Predictive Maintenance", labelFa: "نگهداری پیشگیرانه", subtitleFa: "عمر مفید باقی‌مانده تجهیزات (RUL)" },
-  { path: "/optimization", icon: SlidersHorizontal, label: "Optimization", labelFa: "بهینه‌سازی", subtitleFa: "بهینه‌سازی بلادرنگ فرآیند (RTO/APC)" },
-  { path: "/data-quality", icon: DatabaseZap, label: "Data Quality", labelFa: "کیفیت داده", subtitleFa: "اعتبارسنجی و تطبیق داده‌ها" },
+  { path: "/", icon: LayoutDashboard, label: "Overview", labelFa: "Overview", subtitleFa: "Refinery overview — Park Naft Site" },
+  { path: "/units", icon: Factory, label: "Process Units", labelFa: "Process units", subtitleFa: "Live status of process units" },
+  { path: "/trends", icon: Gauge, label: "Trends", labelFa: "Trends", subtitleFa: "Temperature, pressure and flow trends" },
+  { path: "/tanks", icon: Fuel, label: "Tanks & Storage", labelFa: "Tanks", subtitleFa: "Storage tank levels and capacity" },
+  { path: "/alarms", icon: Siren, label: "Alarms", labelFa: "Alarms", subtitleFa: "Process alarms and events" },
+  { path: "/hse", icon: ShieldCheck, label: "HSE", labelFa: "Safety and environment", subtitleFa: "Health, safety, environment and sustainability" },
+  { path: "/auto-operator", icon: Bot, label: "Auto Operator", labelFa: "Smart operator", subtitleFa: "Automatic switch to standby equipment" },
+  { path: "/maintenance", icon: Wrench, label: "Predictive Maintenance", labelFa: "Preventive maintenance", subtitleFa: "Remaining useful life of equipment (RUL)" },
+  { path: "/optimization", icon: SlidersHorizontal, label: "Optimization", labelFa: "Optimization", subtitleFa: "Real-time process optimization (RTO/APC)" },
+  { path: "/data-quality", icon: DatabaseZap, label: "Data Quality", labelFa: "Data quality", subtitleFa: "Data validation and reconciliation" },
 ];
 
 export const settingsNavItem: NavItem = {
   path: "/settings",
   icon: Settings,
   label: "Settings",
-  labelFa: "تنظیمات",
-  subtitleFa: "تنظیمات ظاهری و اطلاعات محصول",
+  labelFa: "Settings",
+  subtitleFa: "Appearance settings and product information",
 };
 
 export function navItemForPath(pathname: string): NavItem | undefined {

@@ -36,7 +36,7 @@ export function AutoOperator() {
                   a failure raises a critical alarm and waits for manual switchover.
                 </p>
                 <p className="text-[11px] mt-1" style={{ color: "var(--text-muted)" }}>
-                  در صورت فعال بودن، با خرابی تجهیز اصلی، تجهیز زاپاس به‌طور خودکار وارد مدار می‌شود.
+                  When enabled, if the main equipment fails, the standby equipment is brought online automatically.
                 </p>
               </div>
             </div>
@@ -55,7 +55,7 @@ export function AutoOperator() {
           </div>
         </Panel>
 
-        <Panel title="Heavy-Duty Equipment — Duty / Standby Pairs" subtitle="تجهیزات سنگین دوار — واحد اصلی و زاپاس">
+        <Panel title="Heavy-Duty Equipment — Duty / Standby Pairs" subtitle="Heavy rotating equipment — main and standby units">
           <div className="space-y-3">
             {heavyDutyPairs.map((pair) => {
               const duty = unitById.get(pair.dutyUnitId);

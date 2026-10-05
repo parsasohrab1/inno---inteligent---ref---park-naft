@@ -58,7 +58,7 @@ export function Optimization() {
 
         <Panel
           title="Real-Time Optimization (RTO / APC)"
-          subtitle="بهینه‌سازی بلادرنگ فرآیند — پیشنهادهای تنظیم نقطه‌کار"
+          subtitle="Real-time process optimization — operating point adjustment suggestions"
         >
           <div className="space-y-3">
             {recs.map((rec) => (
@@ -118,7 +118,7 @@ export function Optimization() {
           </div>
         </Panel>
 
-        <Panel title="About this module" subtitle="درباره این ماژول">
+        <Panel title="About this module" subtitle="About this module">
           <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             This demonstrates the shape of a real-time optimization (RTO) / advanced process
             control (APC) layer: continuously comparing current setpoints against a

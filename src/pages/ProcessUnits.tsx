@@ -39,11 +39,11 @@ export function ProcessUnits() {
           </Panel>
         </div>
 
-        <Panel title="Process Flow" subtitle="نمای فرآیندی واحدها — CDU → VDU → CRU / HCU → SRU → Product Pool">
+        <Panel title="Process Flow" subtitle="Process view of units — CDU → VDU → CRU / HCU → SRU → Product Pool">
           <ProcessFlowDiagram units={units} />
         </Panel>
 
-        <Panel title="All Process Units" subtitle="وضعیت و بار عملیاتی هر واحد">
+        <Panel title="All Process Units" subtitle="Status and operating load of each unit">
           <EquipmentStatusGrid units={units} />
         </Panel>
       </div>
